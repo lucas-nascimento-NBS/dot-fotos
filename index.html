@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slider Apple Style - Dark Mode com Frame Flutuante</title>
+    <title>Slider Apple Style - Dark Mode com Frame Flutuante (Sombra Suave)</title>
     <style>
         html, body {
             margin: 0;
             padding: 0;
             height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            background-color: #1c1a19; /* Fundo global escuro */
-            display: flex; /* Para centralizar o site-wrapper */
+            background-color: #1c1a19;
+            display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Prevenir scrollbars no body, se o wrapper for 100% */
+            /* overflow: hidden; /* Removido para permitir que a sombra do wrapper se espalhe */
         }
 
         .site-wrapper {
-            width: 95vw; /* Largura do frame */
-            height: 90vh; /* Altura do frame */
-            max-width: 1800px; /* Limite máximo de largura */
-            max-height: 950px; /* Limite máximo de altura */
-            background-color: #1c1a19; /* Fundo do conteúdo do frame */
-            border-radius: 25px; /* Bordas arredondadas para o frame */
-            overflow: hidden; /* Para o full-page-layout respeitar o border-radius */
-            box-shadow: 0px 20px 70px rgba(0, 0, 0, 0.5); /* Efeito de blur/sombra para flutuar */
-            position: relative; /* Contexto de posicionamento */
-            display: flex; /* Para o full-page-layout preencher */
+            width: 95vw;
+            height: 90vh;
+            max-width: 1800px;
+            max-height: 950px;
+            background-color: #1c1a19;
+            border-radius: 25px;
+            overflow: hidden; /* Mantido para o conteúdo INTERNO do wrapper */
+            /* offset-x | offset-y | blur-radius | color */
+            box-shadow: 0 0 120px rgba(100, 100, 100, 0.3); /* Sombra mais suave e difusa */
+            position: relative;
+            display: flex;
         }
 
         .full-page-layout {
             display: flex;
-            width: 100%; /* Ocupa todo o site-wrapper */
-            height: 100%; /* Ocupa todo o site-wrapper */
+            width: 100%;
+            height: 100%;
         }
 
         .slider-column {
@@ -42,19 +43,19 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            background-color: #1c1a19; /* Fundo da coluna do slider */
+            background-color: #1c1a19;
         }
 
         .text-column {
             flex: 0 0 35%;
-            background-color: #1c1a19; /* Fundo da coluna de texto */
+            background-color: #1c1a19;
             padding: 50px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            color: #e8e8e8; /* Cor de texto principal clara */
+            color: #e8e8e8;
         }
 
         .text-column h1 {
@@ -62,13 +63,13 @@
             font-weight: 600;
             margin-bottom: 20px;
             line-height: 1.2;
-            color: #f5f5f7; /* Cor do título mais clara ainda */
+            color: #f5f5f7;
         }
 
         .text-column p {
             font-size: 17px;
             line-height: 1.6;
-            color: #bdbdbd; /* Cor de texto secundário clara */
+            color: #bdbdbd;
             max-width: 450px;
         }
 
@@ -102,7 +103,6 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            /* Sombra sutil para destacar as fotos no fundo escuro */
             box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
             flex-shrink: 0;
         }
