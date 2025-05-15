@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider Apple Style - Mais Linhas</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: #f5f5f7;
+            overflow: hidden;
+        }
+
+        .full-page-layout {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slider-column {
+            flex: 0 0 65%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .text-column {
+            flex: 0 0 35%;
+            background-color: #f5f5f7;
+            padding: 50px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            color: #1d1d1f;
+        }
+
+        .text-column h1 {
+            font-size: 38px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .text-column p {
+            font-size: 17px;
+            line-height: 1.6;
+            color: #515154;
+            max-width: 450px;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-container {
+            position: absolute;
+            width: 160%; /* Aumentado para cobrir após rotação */
+            height: 160%; /* Aumentado para cobrir após rotação */
+            top: -30%;    /* (160% - 100%) / 2 = -30%, para centralizar verticalmente */
+            left: -30%;   /* (160% - 100%) / 2 = -30%, para centralizar horizontalmente */
+            transform: rotate(15deg);
+            transform-origin: center center; /* Rotação em torno do centro do elemento */
+        }
+
+        .photo-cont-item {
+            display: flex;
+        }
+
+        .photo-cont-item .photo-item {
+            width: 320px;
+            height: 200px;
+            margin-right: 60px;
+            margin-bottom: 60px; /* Espaço entre as linhas de fotos */
+            border-radius: 16px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .animation-1 {
+            animation: scroller 40s linear infinite;
+            width: calc((320px + 60px) * 12);
+        }
+
+        .animation-2 {
+            /* margin-left já estava aqui, pode ser ajustado por linha se desejado */
+            animation: scroller 30s linear infinite;
+            width: calc((320px + 60px) * 12);
+        }
+
+        .animation-3 {
+            animation: scroller 50s linear infinite;
+            width: calc((320px + 60px) * 12);
+        }
+
+        @keyframes scroller {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc((-320px - 60px) * 6));
+            }
+        }
+
+        /* Imagens */
+        .photo-1 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513400/Nature/image_18_lwam5y.jpg); }
+        .photo-2 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513347/Nature/image_16_oqcpeb.jpg); }
+        .photo-3 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513347/Nature/image_15_opmlwd.jpg); }
+        .photo-4 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513346/Nature/image_14_nie14a.jpg); }
+        .photo-5 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513346/Nature/image_13_kojf0w.jpg); }
+        .photo-6 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513346/Nature/image_17_hngpby.jpg); }
+        .photo-7 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513346/Nature/image_11_wcunjf.jpg); }
+        .photo-8 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513346/Nature/image_9_stnpjs.jpg); }
+        .photo-9 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_12_m3evi3.jpg); }
+        .photo-10 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_10_euaoai.jpg); }
+        .photo-11 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_7_apdkz1.jpg); }
+        .photo-12 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_8_khwrpi.jpg); }
+        .photo-13 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_5_vhwqqg.jpg); }
+        .photo-14 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_2_nrbfpf.jpg); }
+        .photo-15 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_4_qxw6i4.jpg); }
+        .photo-16 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_3_ucohbw.jpg); }
+        .photo-17 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_1_yitfy3.jpg); }
+        .photo-18 { background-image: url(https://res.cloudinary.com/dzq1l03yt/image/upload/v1593513345/Nature/image_6_xcylqe.jpg); }
+    </style>
+</head>
+<body>
+
+    <div class="full-page-layout">
+        <div class="slider-column">
+            <div class="container">
+                <div class="photo-container">
+                    <!-- Linha 1 -->
+                    <div class="photo-cont-item animation-1">
+                        <div class="photo-item photo-1"></div> <div class="photo-item photo-2"></div> <div class="photo-item photo-3"></div>
+                        <div class="photo-item photo-4"></div> <div class="photo-item photo-5"></div> <div class="photo-item photo-6"></div>
+                        <div class="photo-item photo-1"></div> <div class="photo-item photo-2"></div> <div class="photo-item photo-3"></div>
+                        <div class="photo-item photo-4"></div> <div class="photo-item photo-5"></div> <div class="photo-item photo-6"></div>
+                    </div>
+                    <!-- Linha 2 -->
+                    <div class="photo-cont-item animation-2" style="margin-left: 150px;">
+                        <div class="photo-item photo-7"></div> <div class="photo-item photo-8"></div> <div class="photo-item photo-9"></div>
+                        <div class="photo-item photo-10"></div> <div class="photo-item photo-11"></div> <div class="photo-item photo-12"></div>
+                        <div class="photo-item photo-7"></div> <div class="photo-item photo-8"></div> <div class="photo-item photo-9"></div>
+                        <div class="photo-item photo-10"></div> <div class="photo-item photo-11"></div> <div class="photo-item photo-12"></div>
+                    </div>
+                    <!-- Linha 3 -->
+                    <div class="photo-cont-item animation-3">
+                        <div class="photo-item photo-13"></div> <div class="photo-item photo-14"></div> <div class="photo-item photo-15"></div>
+                        <div class="photo-item photo-16"></div> <div class="photo-item photo-17"></div> <div class="photo-item photo-18"></div>
+                        <div class="photo-item photo-13"></div> <div class="photo-item photo-14"></div> <div class="photo-item photo-15"></div>
+                        <div class="photo-item photo-16"></div> <div class="photo-item photo-17"></div> <div class="photo-item photo-18"></div>
+                    </div>
+                    <!-- Linha 4 (Nova) -->
+                    <div class="photo-cont-item animation-1" style="margin-left: 80px;"> <!-- Reutilizando animation-1 com offset diferente -->
+                        <div class="photo-item photo-1"></div> <div class="photo-item photo-2"></div> <div class="photo-item photo-3"></div>
+                        <div class="photo-item photo-4"></div> <div class="photo-item photo-5"></div> <div class="photo-item photo-6"></div>
+                        <div class="photo-item photo-1"></div> <div class="photo-item photo-2"></div> <div class="photo-item photo-3"></div>
+                        <div class="photo-item photo-4"></div> <div class="photo-item photo-5"></div> <div class="photo-item photo-6"></div>
+                    </div>
+                    <!-- Linha 5 (Nova) -->
+                    <div class="photo-cont-item animation-2" style="margin-left: 200px;"> <!-- Reutilizando animation-2 com offset diferente -->
+                        <div class="photo-item photo-7"></div> <div class="photo-item photo-8"></div> <div class="photo-item photo-9"></div>
+                        <div class="photo-item photo-10"></div> <div class="photo-item photo-11"></div> <div class="photo-item photo-12"></div>
+                        <div class="photo-item photo-7"></div> <div class="photo-item photo-8"></div> <div class="photo-item photo-9"></div>
+                        <div class="photo-item photo-10"></div> <div class="photo-item photo-11"></div> <div class="photo-item photo-12"></div>
+                    </div>
+                     <!-- Linha 6 (Nova) -->
+                    <div class="photo-cont-item animation-3" style="margin-left: 40px;"> <!-- Reutilizando animation-3 com offset diferente -->
+                        <div class="photo-item photo-13"></div> <div class="photo-item photo-14"></div> <div class="photo-item photo-15"></div>
+                        <div class="photo-item photo-16"></div> <div class="photo-item photo-17"></div> <div class="photo-item photo-18"></div>
+                        <div class="photo-item photo-13"></div> <div class="photo-item photo-14"></div> <div class="photo-item photo-15"></div>
+                        <div class="photo-item photo-16"></div> <div class="photo-item photo-17"></div> <div class="photo-item photo-18"></div>
+                    </div>
+
+                </div><!-- .photo-container -->
+            </div><!-- .container -->
+        </div>
+
+        <div class="text-column">
+            <h1>Inovação que Inspira.</h1>
+            <p>Descubra uma nova perspectiva com nossa galeria interativa. Cada imagem conta uma história, cada momento é uma obra de arte. Mergulhe na beleza e deixe sua imaginação voar.</p>
+            <p>Simplicidade. Poder. Elegância. Tudo em um só lugar.</p>
+        </div>
+    </div>
+
+</body>
+</html>
