@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slider Apple Style - Dark Mode com Frame Flutuante (Sombra Suave)</title>
+    <title>Slider Apple Style - Dark Mode com Frame (Sombra Compacta)</title>
     <style>
         html, body {
             margin: 0;
@@ -14,7 +14,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* overflow: hidden; /* Removido para permitir que a sombra do wrapper se espalhe */
+            /* overflow: hidden; /* Mantido comentado/removido para flexibilidade, mas o iframe é o limitador aqui */
         }
 
         .site-wrapper {
@@ -23,10 +23,10 @@
             max-width: 1800px;
             max-height: 950px;
             background-color: #1c1a19;
-            border-radius: 25px;
-            overflow: hidden; /* Mantido para o conteúdo INTERNO do wrapper */
-            /* offset-x | offset-y | blur-radius | color */
-            box-shadow: 0 0 120px rgba(100, 100, 100, 0.3); /* Sombra mais suave e difusa */
+            border-radius: 15px; /* Raio reduzido */
+            overflow: hidden;
+            /* offset-x | offset-y | blur-radius | spread-radius | color */
+            box-shadow: 0 0 15px 2px rgba(100, 100, 100, 0.3); /* Sombra bem menor e compacta */
             position: relative;
             display: flex;
         }
@@ -159,42 +159,37 @@
             <div class="slider-column">
                 <div class="container">
                     <div class="photo-container">
-                        <!-- Linha 1 -->
+                        <!-- Linhas de fotos ... -->
                         <div class="photo-cont-item animation-1">
                             <div class="photo-item photo-1"></div> <div class="photo-item photo-2"></div> <div class="photo-item photo-3"></div>
                             <div class="photo-item photo-4"></div> <div class="photo-item photo-5"></div> <div class="photo-item photo-6"></div>
                             <div class="photo-item photo-1"></div> <div class="photo-item photo-2"></div> <div class="photo-item photo-3"></div>
                             <div class="photo-item photo-4"></div> <div class="photo-item photo-5"></div> <div class="photo-item photo-6"></div>
                         </div>
-                        <!-- Linha 2 -->
                         <div class="photo-cont-item animation-2" style="margin-left: 150px;">
                             <div class="photo-item photo-7"></div> <div class="photo-item photo-8"></div> <div class="photo-item photo-9"></div>
                             <div class="photo-item photo-10"></div> <div class="photo-item photo-11"></div> <div class="photo-item photo-12"></div>
                             <div class="photo-item photo-7"></div> <div class="photo-item photo-8"></div> <div class="photo-item photo-9"></div>
                             <div class="photo-item photo-10"></div> <div class="photo-item photo-11"></div> <div class="photo-item photo-12"></div>
                         </div>
-                        <!-- Linha 3 -->
                         <div class="photo-cont-item animation-3">
                             <div class="photo-item photo-13"></div> <div class="photo-item photo-14"></div> <div class="photo-item photo-15"></div>
                             <div class="photo-item photo-16"></div> <div class="photo-item photo-17"></div> <div class="photo-item photo-18"></div>
                             <div class="photo-item photo-13"></div> <div class="photo-item photo-14"></div> <div class="photo-item photo-15"></div>
                             <div class="photo-item photo-16"></div> <div class="photo-item photo-17"></div> <div class="photo-item photo-18"></div>
                         </div>
-                        <!-- Linha 4 -->
                         <div class="photo-cont-item animation-1" style="margin-left: 80px;">
                             <div class="photo-item photo-1"></div> <div class="photo-item photo-2"></div> <div class="photo-item photo-3"></div>
                             <div class="photo-item photo-4"></div> <div class="photo-item photo-5"></div> <div class="photo-item photo-6"></div>
                             <div class="photo-item photo-1"></div> <div class="photo-item photo-2"></div> <div class="photo-item photo-3"></div>
                             <div class="photo-item photo-4"></div> <div class="photo-item photo-5"></div> <div class="photo-item photo-6"></div>
                         </div>
-                        <!-- Linha 5 -->
                         <div class="photo-cont-item animation-2" style="margin-left: 200px;">
                             <div class="photo-item photo-7"></div> <div class="photo-item photo-8"></div> <div class="photo-item photo-9"></div>
                             <div class="photo-item photo-10"></div> <div class="photo-item photo-11"></div> <div class="photo-item photo-12"></div>
                             <div class="photo-item photo-7"></div> <div class="photo-item photo-8"></div> <div class="photo-item photo-9"></div>
                             <div class="photo-item photo-10"></div> <div class="photo-item photo-11"></div> <div class="photo-item photo-12"></div>
                         </div>
-                         <!-- Linha 6 -->
                         <div class="photo-cont-item animation-3" style="margin-left: 40px;">
                             <div class="photo-item photo-13"></div> <div class="photo-item photo-14"></div> <div class="photo-item photo-15"></div>
                             <div class="photo-item photo-16"></div> <div class="photo-item photo-17"></div> <div class="photo-item photo-18"></div>
