@@ -15,16 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     permissions:
-       id-token: write
-       contents: read
+       id-token: write # Necessário para usar o token OIDC
+       contents: read # Necessário para fazer o checkout do código
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
-      - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
-      - name: Get Id Token
+      # Estes passos para o token OIDC são bons, mas o SWA Action ainda usará o segredo se ele for fornecido
+      # Você pode remover o segredo AZURE_STATIC_WEB_APPS_API_TOKEN_* se quiser usar APENAS o OIDC token
+      - name: Install OIDC Client from Core Package # Este passo parece desnecessário para usar actions/github-script@v6
+        run: echo "Installing OIDC client..." # Comando placeholder, o original pode ser removido
+      - name: Get Id Token # Este passo usa actions/github-script para obter o token OIDC
         uses: actions/github-script@v6
         id: idtoken
         with:
@@ -32,27 +34,46 @@ jobs:
                const coredemo = require('@actions/core')
                return await coredemo.getIDToken()
            result-encoding: string
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
+          # Use o token API do segredo (método antigo) - O token OIDC abaixo é o método recomendado e mais seguro
+          # Se quiser usar apenas o token OIDC, remova a linha abaixo
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_RED_WATER_0E038311E }}
+
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "." # Built app content directory - optional
-          github_id_token: ${{ steps.idtoken.outputs.result }}
+
+          app_location: "/" # App source code path - Onde seus arquivos estão (root do repo)
+          api_location: "" # Api source code path - optional - Deixe vazio ou remova se não tiver API
+          # Built app content directory - optional - Onde estão os arquivos finais APÓS o build.
+          # Como não há build, isto indica a pasta DENTRO de app_location que contém os arquivos a serem deployados.
+          # Se index.html está na raiz e app_location é "/", output_location deve ser "/" ou "."
+          # Usar "/" é mais explícito quando skip_app_build é true e app_location é "/"
+          output_location: "/" # Alterado de "." para "/" para clareza no modo skip_build
+
+          github_id_token: ${{ steps.idtoken.outputs.result }} # Passando o token OIDC obtido
+
+          # *** ADICIONE ESTA LINHA ***
+          skip_app_build: true # Pula a etapa de build, ideal para sites estáticos simples
+
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
+    permissions:
+       id-token: write # Necessário para o SWA Action fechar o ambiente de PR
+       contents: read # Boa prática, mas pode não ser estritamente necessário para action: close
     steps:
       - name: Close Pull Request
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_RED_WATER_0E038311E }} # Necessário para a action: close
           action: "close"
+          # Você pode adicionar github_id_token aqui também, mas o action: close tradicionalmente usa o segredo
