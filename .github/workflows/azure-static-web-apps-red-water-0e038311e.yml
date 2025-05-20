@@ -15,57 +15,69 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     permissions:
-       id-token: write
-       contents: read
-
+       id-token: write # Necessário para usar o token OIDC
+       contents: read # Necessário para fazer o checkout do código
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
 
-      # ————————————————————————————
-      # Estes dois passos OIDC não mudam; mantive porque já estavam aí.
-      # Você pode removê-los se não precisar de login federado.
-      - name: Install OIDC Client from Core Package
+      # *** RESTAURE ESTE PASSO ***
+      # Instala os módulos @actions/core e @actions/http-client
+      # Estes módulos são necessários para o script dentro de actions/github-script@v6
+      - name: Install @actions/core and @actions/http-client
         run: npm install @actions/core@1.6.0 @actions/http-client
 
+      # Este passo agora deve encontrar os módulos instalados acima
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
         with:
-          script: |
-            const core = require('@actions/core');
-            return await core.getIDToken();
-          result-encoding: string
-      # ————————————————————————————
+           script: |
+               const coredemo = require('@actions/core')
+               return await coredemo.getIDToken()
+           result-encoding: string
 
-      - name: Deploy static files          ###  novo nome opcional
+      - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
+          # Use o token API do segredo (método antigo) - O token OIDC abaixo é o método recomendado e mais seguro
+          # Se quiser usar apenas o token OIDC, remova a linha abaixo
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_RED_WATER_0E038311E }}
-          action: upload
 
-          # ——— caminhos do seu site ———
-          app_location: "/"                ### raiz do repositório com index.html; ajuste se precisar
-          output_location: ""              ### vazio quando skip_app_build=true
-          # ————————————————–––––––––––––
+          action: "upload"
+          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
+          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
 
-          # ——— flags que desativam o Oryx ———
-          skip_app_build: true             ### pular build do front-end
-          skip_api_build: true             ### pular build de API (não existe)
-          # ————————————————–––––––––––––––
+          app_location: "/" # App source code path - Onde seus arquivos estão (root do repo)
+          api_location: "" # Api source code path - optional - Deixe vazio ou remova se não tiver API
+          # Built app content directory - optional - Onde estão os arquivos finais APÓS o build.
+          # Como não há build, isto indica a pasta DENTRO de app_location que contém os arquivos a serem deployados.
+          # Se index.html está na raiz e app_location é "/", output_location deve ser "/" ou "."
+          # Usar "/" é mais explícito quando skip_app_build é true e app_location é "/"
+          output_location: "/"
 
-          github_id_token: ${{ steps.idtoken.outputs.result }}
+          github_id_token: ${{ steps.idtoken.outputs.result }} # Passando o token OIDC obtido
+
+          # *** MANTENHA ESTA LINHA ***
+          skip_app_build: true # Pula a etapa de build, ideal para sites estáticos simples
+
+          ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
+    permissions:
+       id-token: write # Necessário para o SWA Action fechar o ambiente de PR
+       contents: read # Boa prática, mas pode não ser estritamente necessário para action: close
     steps:
       - name: Close Pull Request
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          action: close
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_RED_WATER_0E038311E }} # Necessário para a action: close
+          # Você pode adicionar github_id_token aqui também, mas o action: close tradicionalmente usa o segredo
+          action: "close"
