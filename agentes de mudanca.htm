@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentes de Mudança | Proposta de Iniciativa</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: #0a0a0f;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #f0f0f5;
+            user-select: none;
+        }
+
+        /* CANVAS 3D */
+        #canvas-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+        }
+
+        /* GRAIN OVERLAY */
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* UI LAYER */
+        #ui-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            padding-left: 6%;
+        }
+
+        /* CONTENT CARDS */
+        .content-card {
+            background: linear-gradient(135deg, rgba(15, 15, 25, 0.92) 0%, rgba(10, 10, 18, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 48px 52px;
+            border-radius: 2px;
+            border-left: 4px solid;
+            border-image: linear-gradient(180deg, #00d4ff, #0066ff) 1;
+            box-shadow: 
+                0 25px 80px rgba(0,0,0,0.6),
+                0 0 0 1px rgba(255,255,255,0.03),
+                inset 0 1px 0 rgba(255,255,255,0.02);
+            max-width: 540px;
+            pointer-events: auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            display: none;
+        }
+
+        .content-card.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-label {
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 2.1rem;
+            margin-bottom: 24px;
+            font-weight: 600;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #ffffff 0%, #c0e8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        p {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.15rem;
+            line-height: 1.75;
+            color: #a8a8b8;
+            margin-bottom: 18px;
+        }
+
+        .highlight {
+            color: #ffb347;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .stat-box {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin: 8px 8px 8px 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .stat-box strong {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, rgba(255, 179, 71, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
+            border: 1px solid rgba(255, 179, 71, 0.25);
+            padding: 20px 28px;
+            border-radius: 6px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .formula-box .formula {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffb347;
+            letter-spacing: 1px;
+        }
+
+        .insight-quote {
+            border-left: 2px solid #4a9eff;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #8899bb;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }
+
+        ul li {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #a8a8b8;
+            padding-left: 24px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #00d4ff, #0066ff);
+            border-radius: 50%;
+        }
+
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid rgba(255, 179, 71, 0.4);
+            color: #ffb347;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-link:hover {
+            background: rgba(255, 179, 71, 0.1);
+            border-color: #ffb347;
+            transform: translateX(4px);
+        }
+
+        .btn-link::after {
+            content: '→';
+            transition: transform 0.3s ease;
+        }
+
+        .btn-link:hover::after {
+            transform: translateX(4px);
+        }
+
+        /* NAVIGATION */
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 12px;
+            pointer-events: auto;
+            z-index: 20;
+        }
+
+        .nav-btn {
+            width: 52px;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #0a0a0f;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: scale(1.08);
+            box-shadow: 0 6px 30px rgba(255,255,255,0.2);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* PROGRESS */
+        .progress-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: rgba(255,255,255,0.05);
+            z-index: 30;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #0066ff);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 48px;
+            left: 40px;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            font-weight: 500;
+            z-index: 20;
+        }
+
+        /* KEYBOARD HINT */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 48px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.2);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            z-index: 20;
+        }
+
+        .keyboard-hint kbd {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 8px;
+            border-radius: 3px;
+            margin: 0 4px;
+        }
+
+        /* COMPARISON GRID */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .comparison-item {
+            padding: 16px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .comparison-item.negative {
+            background: rgba(255, 80, 80, 0.08);
+            border: 1px solid rgba(255, 80, 80, 0.2);
+        }
+
+        .comparison-item.positive {
+            background: rgba(80, 255, 150, 0.08);
+            border: 1px solid rgba(80, 255, 150, 0.2);
+        }
+
+        .comparison-item .icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .comparison-item h4 {
+            font-size: 0.85rem;
+            color: #fff;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .comparison-item p {
+            font-size: 0.9rem;
+            margin: 0;
+            color: #888;
+        }
+
+        /* TEAM AVATARS */
+        .team-grid {
+            display: flex;
+            gap: 16px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .team-member {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-member .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #fff;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .team-member .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-member span {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            #ui-layer { padding-left: 5%; padding-right: 5%; }
+            .content-card { padding: 32px; max-width: 100%; }
+            h1 { font-size: 1.6rem; }
+            p { font-size: 1rem; }
+            .nav-controls { bottom: 24px; right: 24px; }
+            .slide-counter { left: 24px; bottom: 28px; }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+<div class="grain-overlay"></div>
+<div id="canvas-container"></div>
+<div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+
+<div id="ui-layer">
+    <div class="content-card active" id="slide-0">
+        <div class="slide-label">Proposta de Iniciativa</div>
+        <h1>Agentes de Mudança</h1>
+        <p>Uma estratégia baseada em neurociência comportamental para elevar o clima organizacional e a performance através da <span class="highlight">influência positiva intencional</span>.</p>
+        <p style="color: #666; font-size: 0.95rem; margin-top: 24px;">Lucas Nascimento - Data Operations Team</p>
+    </div>
+
+    <div class="content-card" id="slide-1">
+        <div class="slide-label">01. A Base Metodológica</div>
+        <h1>A Linguagem Secreta do Carisma</h1>
+        <p>Metodologia fundamentada em estudos de neurociência e comportamento humano. A autora Vanessa Van Edwards liderou workshops em empresas como Amazon, Microsoft, Google e Intel.</p>
+        <p>O livro classifica os sinais em quatro canais: <span class="highlight">não-verbais, vocais, verbais e visuais</span> — com técnicas práticas para cada um.</p>
+        <a href="https://www.amazon.com.br/linguagem-secreta-carisma-comunica%C3%A7%C3%A3o-objetivos-ebook/dp/B0BYPXVNHD" target="_blank" class="btn-link">Ver na Amazon</a>
+    </div>
+
+    <div class="content-card" id="slide-2">
+        <div class="slide-label">02. O Problema Invisível</div>
+        <h1>Sinais que Sabotam</h1>
+        <p>Pesquisas mostram que <span class="highlight">65% a 90%</span> da nossa comunicação é não-verbal. Todos os dias, enviamos centenas de sinais sutis — muitos deles nos prejudicam sem que percebamos.</p>
+        <div class="insight-quote">
+            "De que adianta uma ideia brilhante se ninguém a ouve?"<br>
+            <small>— Vanessa Van Edwards</small>
+        </div>
+        <p>Profissionais inteligentes frequentemente focam demais no <em>conteúdo</em> e de menos nos <em>sinais</em> que transmitem.</p>
+    </div>
+
+    <div class="content-card" id="slide-3">
+        <div class="slide-label">03. A Ciência do Carisma</div>
+        <h1>A Fórmula de Princeton</h1>
+        <p>Um estudo da Universidade Princeton revelou que pessoas carismáticas exibem uma combinação especial de duas características:</p>
+        <div class="formula-box">
+            <div class="formula">CARISMA = AMABILIDADE + COMPETÊNCIA</div>
+        </div>
+        <p>Esses dois traços respondem por <span class="highlight">82%</span> das impressões que formamos dos outros. Primeiro avaliamos: <em>"Posso confiar em você?"</em> Depois: <em>"Posso contar com você?"</em></p>
+    </div>
+
+    <div class="content-card" id="slide-4">
+        <div class="slide-label">04. A Escala do Carisma</div>
+        <h1>O Equilíbrio Invisível</h1>
+        <p>Todos nós tendemos naturalmente para um dos lados entre amabilidade e competência. Esse é o principal motivo de dificuldades sociais e potencial desperdiçado.</p>
+        <div class="stat-box"><strong>Muito amável:</strong> confiável, mas nem sempre respeitado</div>
+        <div class="stat-box"><strong>Muito competente:</strong> admirado, mas nem sempre acessível</div>
+        <p style="margin-top: 16px;">Os líderes mais eficazes transitam com flexibilidade entre os dois — ajustando seus sinais conforme a situação.</p>
+    </div>
+
+    <div class="content-card" id="slide-5">
+        <div class="slide-label">05. A Prova Científica</div>
+        <h1>O "Ator Infiltrado"</h1>
+        <p>Em um experimento, grupos foram encarregados de tomar decisões. Em cada grupo havia um ator com um comportamento específico:</p>
+        <div class="comparison-grid">
+            <div class="comparison-item negative">
+                <div class="icon">😤</div>
+                <h4>Ator Negativo</h4>
+                <p>Mais conflitos, decisões injustas, cooperação baixa</p>
+            </div>
+            <div class="comparison-item positive">
+                <div class="icon">😊</div>
+                <h4>Ator Positivo</h4>
+                <p>Melhor desempenho, mais cooperação, decisões justas</p>
+            </div>
+        </div>
+        <p><span class="highlight">Uma única pessoa</span> mudou completamente as decisões e a dinâmica do grupo inteiro.</p>
+    </div>
+
+    <div class="content-card" id="slide-6">
+        <div class="slide-label">06. Neurociência Aplicada</div>
+        <h1>Contágio Emocional</h1>
+        <p>O humor é <em>tecnicamente</em> viral. Nosso cérebro possui "neurônios-espelho" que replicam o estado emocional das pessoas ao redor — especialmente de figuras de liderança.</p>
+        <div class="insight-quote">
+            "Basta estar 5 minutos perto de alguém para captar seu estado de espírito."
+        </div>
+        <p>Funcionários que recebem sinais positivos de líderes se sentem mais incluídos, engajados e leais — e têm <span class="highlight">melhor desempenho</span>.</p>
+    </div>
+
+    <div class="content-card" id="slide-7">
+        <div class="slide-label">07. A Proposta</div>
+        <h1>Núcleo de Influência Positiva</h1>
+        <p>A proposta é simples: formar um pequeno grupo de estudos e prática. Pessoas que querem desenvolver essa habilidade juntas, e aplicar no dia a dia, de forma natural e sutil.</p>
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Beatriz.Bernardo@br.nestle.com" alt="Beatriz"></div>
+                <span>Beatriz</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Victor.Machado@br.nestle.com" alt="Victor"></div>
+                <span>Victor</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Ana.Cecon@br.nestle.com" alt="Ana"></div>
+                <span>Ana</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Alberto.Torrens@br.nestle.com" alt="Alberto"></div>
+                <span>Alberto</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Gabrielle.Daido@br.nestle.com" alt="Gabrielle"></div>
+                <span>Gabrielle</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=lucas.nascimento1@br.nestle.com" alt="Lucas"></div>
+                <span>Lucas</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Paulo.Junior7@br.nestle.com" alt="Paulo"></div>
+                <span>Paulo</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Apparecido.Junior@br.nestle.com" alt="Apparecido"></div>
+                <span>Apparecido</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Dulce.Delgado@py.nestle.com" alt="Dulce"></div>
+                <span>Dulce</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Lucas.Luccio@py.nestle.com" alt="Lucas Luccio"></div>
+                <span>Lucas L.</span>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=Lucas.Romao@br.nestle.com" alt="Lucas Romão"></div>
+                <span>Lucas R.</span>
+            </div>
+        </div>
+        <p><strong>Missão:</strong> Ler o ambiente, interpretar sinais de tensão e corrigir a rota do time — sem anúncios formais. A intenção não é criar um "comitê de clima organizacional", mas sim ter pessoas atentas, que ajustem a energia do time, de forma sutil e genuína.</p>
+    </div>
+
+    <div class="content-card" id="slide-8">
+        <div class="slide-label">08. O caminho</div>
+        <h1>Execução Prática</h1>
+        <ul>
+            <li><strong>Leitura individual</strong> — fluída e progressiva</li>
+            <li><strong>Debates semanais</strong> — 30 - 60min focados em capítulos específicos</li>
+            <li><strong>Aplicação imediata</strong> — testar em reuniões e interações reais</li>
+            <li><strong>Feedback cruzado</strong> — identificar sinais uns nos outros</li>
+        </ul>
+        <p style="margin-top: 20px; color: #ffb347; font-weight: 500; font-family: 'Space Grotesk', sans-serif;">Nossos sinais criam circuitos — positivos ou negativos. Vamos escolher criar os certos.</p>
+    </div>
+</div>
+
+<div class="slide-counter">
+    <span id="current-slide-num">1</span> / <span id="total-slides">9</span>
+</div>
+
+<div class="keyboard-hint">
+    <kbd>←</kbd> <kbd>→</kbd> ou <kbd>espaço</kbd> para navegar
+</div>
+
+<div class="nav-controls">
+    <button class="nav-btn" id="btn-prev" disabled>←</button>
+    <button class="nav-btn" id="btn-next">→</button>
+</div>
+
+<script>
+// THREE.JS CONFIGURATION
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0a0a0f, 0.012);
+
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+container.appendChild(renderer.domElement);
+
+// LIGHTING
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+scene.add(ambientLight);
+
+const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
+mainLight.position.set(20, 30, 20);
+mainLight.castShadow = true;
+scene.add(mainLight);
+
+const blueLight = new THREE.PointLight(0x00d4ff, 1.2, 60);
+blueLight.position.set(-15, 10, 15);
+scene.add(blueLight);
+
+const orangeLight = new THREE.PointLight(0xffb347, 0.6, 50);
+orangeLight.position.set(15, -8, 12);
+scene.add(orangeLight);
+
+const objects = [];
+const clock = new THREE.Clock();
+
+// SLIDE 0: PARTICLE NEBULA
+function createNebula() {
+    const group = new THREE.Group();
+    const particleCount = 1500;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    
+    for(let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        const radius = 15 + Math.random() * 10;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        
+        positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        positions[i3 + 2] = radius * Math.cos(phi);
+        
+        // Color gradient
+        const t = Math.random();
+        colors[i3] = 0 + t * 0.3;
+        colors[i3 + 1] = 0.5 + t * 0.3;
+        colors[i3 + 2] = 1;
+    }
+    
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    
+    const material = new THREE.PointsMaterial({
+        size: 0.08,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.7,
+        blending: THREE.AdditiveBlending
+    });
+    
+    const particles = new THREE.Points(geometry, material);
+    group.add(particles);
+    
+    // Central glow
+    const glowGeometry = new THREE.SphereGeometry(3, 32, 32);
+    const glowMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00d4ff,
+        transparent: true,
+        opacity: 0.1
+    });
+    const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+    group.add(glow);
+    
+    scene.add(group);
+    objects.push({ mesh: group, id: 0, type: 'nebula' });
+}
+
+// SLIDE 1: BROKEN SIGNALS
+function createBrokenSignals() {
+    const group = new THREE.Group();
+    group.position.set(100, 0, 0);
+    
+    // Scattered disconnected nodes
+    const nodeCount = 12;
+    const nodeGeometry = new THREE.OctahedronGeometry(0.4, 0);
+    
+    for(let i = 0; i < nodeCount; i++) {
+        const material = new THREE.MeshStandardMaterial({
+            color: i < 6 ? 0xff4444 : 0x444466,
+            emissive: i < 6 ? 0x440000 : 0x111122,
+            metalness: 0.8,
+            roughness: 0.3
+        });
+        
+        const node = new THREE.Mesh(nodeGeometry, material);
+        const angle = (i / nodeCount) * Math.PI * 2;
+        const radius = 3 + Math.random() * 2;
+        
+        node.position.set(
+            Math.cos(angle) * radius + (Math.random() - 0.5) * 2,
+            (Math.random() - 0.5) * 4,
+            Math.sin(angle) * radius + (Math.random() - 0.5) * 2
+        );
+        
+        node.userData = { 
+            originalPos: node.position.clone(),
+            offset: Math.random() * Math.PI * 2 
+        };
+        
+        group.add(node);
+    }
+    
+    // Broken/dashed lines
+    const lineMaterial = new THREE.LineDashedMaterial({
+        color: 0xff4444,
+        dashSize: 0.3,
+        gapSize: 0.2,
+        transparent: true,
+        opacity: 0.4
+    });
+    
+    for(let i = 0; i < 5; i++) {
+        const points = [
+            new THREE.Vector3((Math.random() - 0.5) * 6, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 6),
+            new THREE.Vector3((Math.random() - 0.5) * 6, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 6)
+        ];
+        const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+        const line = new THREE.Line(lineGeometry, lineMaterial);
+        line.computeLineDistances();
+        group.add(line);
+    }
+    
+    scene.add(group);
+    objects.push({ mesh: group, id: 1, type: 'chaos' });
+}
+
+// SLIDE 2: BALANCE SCALE (Charisma Formula)
+function createBalanceScale() {
+    const group = new THREE.Group();
+    group.position.set(150, 0, 0);
+    
+    // Central pillar
+    const pillarGeometry = new THREE.CylinderGeometry(0.15, 0.2, 4, 8);
+    const pillarMaterial = new THREE.MeshStandardMaterial({
+        color: 0xaaccff,
+        metalness: 0.9,
+        roughness: 0.1
+    });
+    const pillar = new THREE.Mesh(pillarGeometry, pillarMaterial);
+    group.add(pillar);
+    
+    // Balance beam
+    const beamGeometry = new THREE.BoxGeometry(6, 0.1, 0.3);
+    const beam = new THREE.Mesh(beamGeometry, pillarMaterial);
+    beam.position.y = 2;
+    group.add(beam);
+    
+    // Left sphere (Warmth)
+    const warmthGeometry = new THREE.SphereGeometry(0.8, 32, 32);
+    const warmthMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffb347,
+        emissive: 0x442200,
+        metalness: 0.3,
+        roughness: 0.4
+    });
+    const warmth = new THREE.Mesh(warmthGeometry, warmthMaterial);
+    warmth.position.set(-2.5, 1, 0);
+    group.add(warmth);
+    
+    // Right sphere (Competence)
+    const compGeometry = new THREE.SphereGeometry(0.8, 32, 32);
+    const compMaterial = new THREE.MeshStandardMaterial({
+        color: 0x00d4ff,
+        emissive: 0x002244,
+        metalness: 0.3,
+        roughness: 0.4
+    });
+    const comp = new THREE.Mesh(compGeometry, compMaterial);
+    comp.position.set(2.5, 1, 0);
+    group.add(comp);
+    
+    // Connection lines
+    const lineMat = new THREE.LineBasicMaterial({ color: 0xaaccff, transparent: true, opacity: 0.5 });
+    const leftLine = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(-2.5, 2, 0),
+        new THREE.Vector3(-2.5, 1.8, 0)
+    ]);
+    const rightLine = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(2.5, 2, 0),
+        new THREE.Vector3(2.5, 1.8, 0)
+    ]);
+    group.add(new THREE.Line(leftLine, lineMat));
+    group.add(new THREE.Line(rightLine, lineMat));
+    
+    scene.add(group);
+    objects.push({ mesh: group, id: 2, type: 'balance', beam: beam, warmth: warmth, comp: comp });
+}
+
+// SLIDE 3: QUADRANT GRID
+function createQuadrant() {
+    const group = new THREE.Group();
+    group.position.set(200, 0, 0);
+    
+    // Helper function to create text sprite
+    function createTextLabel(text, fontSize, color) {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = 512;
+        canvas.height = 128;
+        
+        context.font = `bold ${fontSize}px 'Space Grotesk', Arial, sans-serif`;
+        context.fillStyle = color;
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.fillText(text, canvas.width / 2, canvas.height / 2);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+        
+        const spriteMaterial = new THREE.SpriteMaterial({ 
+            map: texture, 
+            transparent: true,
+            depthTest: false
+        });
+        const sprite = new THREE.Sprite(spriteMaterial);
+        sprite.scale.set(4, 1, 1);
+        
+        return sprite;
+    }
+    
+    // Grid lines
+    const gridMaterial = new THREE.LineBasicMaterial({ color: 0x556677, transparent: true, opacity: 0.6 });
+    
+    // Vertical line (AMABILIDADE axis)
+    const vLine = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(0, -4.5, 0),
+        new THREE.Vector3(0, 4.5, 0)
+    ]);
+    group.add(new THREE.Line(vLine, gridMaterial));
+    
+    // Horizontal line (COMPETÊNCIA axis)
+    const hLine = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(-5, 0, 0),
+        new THREE.Vector3(5, 0, 0)
+    ]);
+    group.add(new THREE.Line(hLine, gridMaterial));
+    
+    // Arrow heads
+    const arrowMat = new THREE.MeshBasicMaterial({ color: 0x556677 });
+    
+    // Top arrow (Amabilidade)
+    const topArrow = new THREE.ConeGeometry(0.15, 0.4, 8);
+    const topArrowMesh = new THREE.Mesh(topArrow, arrowMat);
+    topArrowMesh.position.set(0, 4.5, 0);
+    group.add(topArrowMesh);
+    
+    // Right arrow (Competência)
+    const rightArrow = new THREE.ConeGeometry(0.15, 0.4, 8);
+    const rightArrowMesh = new THREE.Mesh(rightArrow, arrowMat);
+    rightArrowMesh.position.set(5, 0, 0);
+    rightArrowMesh.rotation.z = -Math.PI / 2;
+    group.add(rightArrowMesh);
+    
+    // AXIS LABELS
+    const amabilidadeLabel = createTextLabel('AMABILIDADE', 36, '#88aacc');
+    amabilidadeLabel.position.set(-1.8, 4.2, 0);
+    amabilidadeLabel.scale.set(3, 0.75, 1);
+    group.add(amabilidadeLabel);
+    
+    const competenciaLabel = createTextLabel('COMPETÊNCIA', 36, '#88aacc');
+    competenciaLabel.position.set(3.5, -0.8, 0);
+    competenciaLabel.scale.set(3, 0.75, 1);
+    group.add(competenciaLabel);
+    
+    // QUADRANT LABELS
+    // Top-left: AMÁVEL
+    const amavelLabel = createTextLabel('AMÁVEL', 42, '#ffb347');
+    amavelLabel.position.set(-2.5, 2.8, 0);
+    amavelLabel.scale.set(2.5, 0.7, 1);
+    group.add(amavelLabel);
+    
+    // Top-right: ZONA DO CARISMA
+    const carismaLabel1 = createTextLabel('ZONA DO', 32, '#00ff88');
+    carismaLabel1.position.set(2.5, 3.2, 0);
+    carismaLabel1.scale.set(2.2, 0.6, 1);
+    group.add(carismaLabel1);
+    
+    const carismaLabel2 = createTextLabel('CARISMA', 38, '#00ff88');
+    carismaLabel2.position.set(2.5, 2.5, 0);
+    carismaLabel2.scale.set(2.5, 0.7, 1);
+    group.add(carismaLabel2);
+    
+    // Bottom-left: ZONA DO PERIGO
+    const perigoLabel1 = createTextLabel('ZONA DO', 28, '#ff6666');
+    perigoLabel1.position.set(-2.5, -2.2, 0);
+    perigoLabel1.scale.set(2, 0.55, 1);
+    group.add(perigoLabel1);
+    
+    const perigoLabel2 = createTextLabel('PERIGO', 34, '#ff6666');
+    perigoLabel2.position.set(-2.5, -2.9, 0);
+    perigoLabel2.scale.set(2.2, 0.6, 1);
+    group.add(perigoLabel2);
+    
+    // Bottom-right: COMPETENTE
+    const competenteLabel = createTextLabel('COMPETENTE', 38, '#00d4ff');
+    competenteLabel.position.set(2.5, -2.5, 0);
+    competenteLabel.scale.set(2.8, 0.7, 1);
+    group.add(competenteLabel);
+    
+    // Quadrant zone indicators (subtle)
+    const zones = [
+        { pos: [2.5, 2, 0], color: 0x00ff88 },  // Carisma
+        { pos: [-2.5, 2, 0], color: 0xffb347 }, // Amável
+        { pos: [2.5, -1.5, 0], color: 0x00d4ff }, // Competente
+        { pos: [-2.5, -1.5, 0], color: 0xff4444 }  // Perigo
+    ];
+    
+    zones.forEach((zone, i) => {
+        const geometry = new THREE.SphereGeometry(0.25, 16, 16);
+        const material = new THREE.MeshStandardMaterial({
+            color: zone.color,
+            emissive: zone.color,
+            emissiveIntensity: 0.4,
+            transparent: true,
+            opacity: 0.6
+        });
+        const sphere = new THREE.Mesh(geometry, material);
+        sphere.position.set(...zone.pos);
+        group.add(sphere);
+    });
+    
+    // Star in charisma zone
+    const starGeometry = new THREE.OctahedronGeometry(0.4, 0);
+    const starMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: 0x00ff88,
+        emissiveIntensity: 0.6
+    });
+    const star = new THREE.Mesh(starGeometry, starMaterial);
+    star.position.set(3.8, 3.5, 0);
+    group.add(star);
+    
+    scene.add(group);
+    objects.push({ mesh: group, id: 3, type: 'quadrant', star: star });
+}
+
+// SLIDE 4: EXPERIMENT (Positive vs Negative)
+function createExperiment() {
+    const masterGroup = new THREE.Group();
+    // ALINHAMENTO: Ajustado X para 250 para manter o modelo à direita da tela
+    masterGroup.position.set(250, 0, 0);
+
+    // Função auxiliar para desenhar o Check ou X
+    function createMarkSprite(type) {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = 256;
+        canvas.height = 256;
+        
+        context.font = 'bold 200px Arial, sans-serif';
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        
+        if (type === 'check') {
+            context.fillStyle = '#00ff88'; // Cor Verde
+            context.fillText('✓', canvas.width / 2, canvas.height / 2);
+        } else {
+            context.fillStyle = '#ff4444'; // Cor Vermelha
+            context.fillText('✕', canvas.width / 2, canvas.height / 2);
+        }
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        const spriteMaterial = new THREE.SpriteMaterial({ 
+            map: texture, 
+            transparent: true, 
+            opacity: 0.9 
+        });
+        
+        const sprite = new THREE.Sprite(spriteMaterial);
+        sprite.scale.set(3.5, 3.5, 1); // Tamanho do ícone
+        return sprite;
+    }
+
+    // Função para construir um grupo (Positivo ou Negativo)
+    function buildGroup(offsetX, isPositive) {
+        const group = new THREE.Group();
+        group.position.x = offsetX;
+
+        // 1. Central Actor
+        const actorGeometry = new THREE.DodecahedronGeometry(1, 0);
+        const actorMaterial = new THREE.MeshStandardMaterial({
+            color: isPositive ? 0x00ff88 : 0xff4444,
+            emissive: isPositive ? 0x004422 : 0x440000,
+            emissiveIntensity: 0.4,
+            metalness: 0.7,
+            roughness: 0.2
+        });
+        const actor = new THREE.Mesh(actorGeometry, actorMaterial);
+        group.add(actor);
+
+        // 2. O Sprite (Marca de Check ou X)
+        const mark = createMarkSprite(isPositive ? 'check' : 'x');
+        mark.position.set(0, 3.5, 0); // Posição inicial
+        group.add(mark);
+        
+        // Salvamos o mark no userData para animar depois
+        group.userData = { mark: mark };
+
+        // 3. Surrounding Team
+        const peopleCount = 6;
+        const peopleGeometry = new THREE.SphereGeometry(0.4, 16, 16);
+        const personColor = 0x88aacc;
+
+        for(let i = 0; i < peopleCount; i++) {
+            const angle = (i / peopleCount) * Math.PI * 2;
+            const radius = 3.0;
+
+            const personMaterial = new THREE.MeshStandardMaterial({
+                color: personColor,
+                roughness: 0.5
+            });
+
+            const person = new THREE.Mesh(peopleGeometry, personMaterial);
+            person.position.set(
+                Math.cos(angle) * radius,
+                Math.sin(angle * 2) * 0.5,
+                Math.sin(angle) * radius
+            );
+            group.add(person);
+
+            // Linha de conexão (Verde ou Vermelha)
+            const lineMat = new THREE.LineBasicMaterial({
+                color: isPositive ? 0x00ff88 : 0xff4444,
+                transparent: true,
+                opacity: 0.2
+            });
+            const lineGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(0, 0, 0),
+                person.position
+            ]);
+            group.add(new THREE.Line(lineGeo, lineMat));
+        }
+
+        // Ripple Rings (Ambiente)
+        const ringColor = isPositive ? 0x00ff88 : 0xff4444;
+        const ringGeometry = new THREE.TorusGeometry(2.5, 0.02, 8, 32);
+        const ringMaterial = new THREE.MeshBasicMaterial({
+            color: ringColor,
+            transparent: true,
+            opacity: 0.15
+        });
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+        ring.rotation.x = Math.PI / 2;
+        group.add(ring);
+
+        masterGroup.add(group);
+        return group; 
+    }
+
+    // Criar os dois grupos lado a lado
+    const negGroup = buildGroup(-5, false); // Esquerda
+    const posGroup = buildGroup(5, true);   // Direita
+
+    scene.add(masterGroup);
+    
+    // Adiciona ao array de objetos
+    objects.push({ 
+        mesh: masterGroup, 
+        id: 4, 
+        type: 'experiment', 
+        negGroup: negGroup,
+        posGroup: posGroup
+    });
+}
+
+// SLIDE 5: BRAIN NEURONS
+function createBrain() {
+    const group = new THREE.Group();
+    group.position.set(300, 0, 0);
+    
+    // Neural network particles
+    const neuronCount = 400;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(neuronCount * 3);
+    
+    for(let i = 0; i < neuronCount; i++) {
+        const i3 = i * 3;
+        const r = 3;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        
+        positions[i3] = r * Math.sin(phi) * Math.cos(theta);
+        positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+        positions[i3 + 2] = r * Math.cos(phi);
+    }
+    
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    
+    const material = new THREE.PointsMaterial({
+        color: 0x00ff88,
+        size: 0.1,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending
+    });
+    
+    const neurons = new THREE.Points(geometry, material);
+    group.add(neurons);
+    
+    // Brain outline
+    const outlineGeometry = new THREE.IcosahedronGeometry(3.2, 1);
+    const outlineMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00ff88,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.15
+    });
+    const outline = new THREE.Mesh(outlineGeometry, outlineMaterial);
+    group.add(outline);
+    
+    // Synaptic connections
+    const synapseMaterial = new THREE.LineBasicMaterial({
+        color: 0x00ffaa,
+        transparent: true,
+        opacity: 0.2
+    });
+    
+    for(let i = 0; i < 20; i++) {
+        const start = new THREE.Vector3(
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 5
+        );
+        const end = new THREE.Vector3(
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 5
+        );
+        
+        const synapseGeo = new THREE.BufferGeometry().setFromPoints([start, end]);
+        const synapse = new THREE.Line(synapseGeo, synapseMaterial);
+        group.add(synapse);
+    }
+    
+    scene.add(group);
+    objects.push({ mesh: group, id: 5, type: 'brain', neurons: neurons, outline: outline });
+}
+
+// SLIDE 6: THE BOOK
+function createBook() {
+    const group = new THREE.Group();
+    group.position.set(50, 0, 0);
+    
+    // Book geometry
+    const bookGeometry = new THREE.BoxGeometry(3.2, 4.5, 0.5);
+    
+    const loader = new THREE.TextureLoader();
+    // Optimize texture loading with error handling and size limits
+    const coverTexture = loader.load(
+        'https://m.media-amazon.com/images/I/81DqwHZsDTL._SL1500_.jpg',
+        undefined,
+        undefined,
+        (error) => {
+            console.warn('Texture load error:', error);
+        }
+    );
+    // Limit texture size to prevent excessive memory usage
+    coverTexture.minFilter = THREE.LinearFilter;
+    coverTexture.magFilter = THREE.LinearFilter;
+    
+    const coverMaterial = new THREE.MeshStandardMaterial({
+        map: coverTexture,
+        roughness: 0.3
+    });
+    const pageMaterial = new THREE.MeshStandardMaterial({ color: 0xf5f5f0 });
+    const spineMaterial = new THREE.MeshStandardMaterial({ color: 0x222222 });
+    
+    const materials = [
+        pageMaterial, spineMaterial,
+        pageMaterial, pageMaterial,
+        coverMaterial, spineMaterial
+    ];
+    
+    const book = new THREE.Mesh(bookGeometry, materials);
+    book.castShadow = true;
+    group.add(book);
+    
+    // Floating highlight particles around book
+    const particleCount = 50;
+    const particleGeometry = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    
+    for(let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        const angle = (i / particleCount) * Math.PI * 2;
+        const radius = 3 + Math.random();
+        
+        particlePositions[i3] = Math.cos(angle) * radius;
+        particlePositions[i3 + 1] = (Math.random() - 0.5) * 5;
+        particlePositions[i3 + 2] = Math.sin(angle) * radius;
+    }
+    
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    
+    const particleMaterial = new THREE.PointsMaterial({
+        color: 0xffb347,
+        size: 0.05,
+        transparent: true,
+        opacity: 0.6
+    });
+    
+    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    group.add(particles);
+    
+    scene.add(group);
+    objects.push({ mesh: group, id: 6, type: 'book', book: book, particles: particles });
+}
+
+// SLIDE 7: TEAM NETWORK
+function createTeamNetwork() {
+    const group = new THREE.Group();
+    group.position.set(350, 0, 0);
+    
+    // Central hub
+    const hubGeometry = new THREE.OctahedronGeometry(1.2, 0);
+    const hubMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffb347,
+        emissive: 0xff6600,
+        emissiveIntensity: 0.4,
+        metalness: 0.8,
+        roughness: 0.2
+    });
+    const hub = new THREE.Mesh(hubGeometry, hubMaterial);
+    group.add(hub);
+    
+    // Team members
+    const teamColors = [0x00d4ff, 0x00ff88, 0xff6699, 0xaa88ff, 0xffcc00];
+    const teamCount = 5;
+    
+    for(let i = 0; i < teamCount; i++) {
+        const angle = (i / teamCount) * Math.PI * 2;
+        const radius = 4;
+        
+        const memberGeometry = new THREE.SphereGeometry(0.6, 16, 16);
+        const memberMaterial = new THREE.MeshStandardMaterial({
+            color: teamColors[i],
+            emissive: teamColors[i],
+            emissiveIntensity: 0.2,
+            roughness: 0.4
+        });
+        
+        const member = new THREE.Mesh(memberGeometry, memberMaterial);
+        member.position.set(
+            Math.cos(angle) * radius,
+            Math.sin(angle * 2) * 0.8,
+            Math.sin(angle) * radius
+        );
+        group.add(member);
+        
+        // Connection to hub
+        const lineMat = new THREE.LineBasicMaterial({
+            color: teamColors[i],
+            transparent: true,
+            opacity: 0.5
+        });
+        const lineGeo = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0, 0, 0),
+            member.position
+        ]);
+        group.add(new THREE.Line(lineGeo, lineMat));
+        
+        // Inter-member connections
+        if(i > 0) {
+            const prevAngle = ((i - 1) / teamCount) * Math.PI * 2;
+            const prevPos = new THREE.Vector3(
+                Math.cos(prevAngle) * radius,
+                Math.sin(prevAngle * 2) * 0.8,
+                Math.sin(prevAngle) * radius
+            );
+            
+            const interMat = new THREE.LineBasicMaterial({
+                color: 0x334455,
+                transparent: true,
+                opacity: 0.3
+            });
+            const interGeo = new THREE.BufferGeometry().setFromPoints([prevPos, member.position]);
+            group.add(new THREE.Line(interGeo, interMat));
+        }
+    }
+    
+    // Orbit ring
+    const orbitGeometry = new THREE.TorusGeometry(4, 0.02, 8, 64);
+    const orbitMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffb347,
+        transparent: true,
+        opacity: 0.2
+    });
+    const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
+    orbit.rotation.x = Math.PI / 2;
+    group.add(orbit);
+    
+    scene.add(group);
+    objects.push({ mesh: group, id: 7, type: 'team', hub: hub });
+}
+
+// SLIDE 8: ICEBERG - Influência Sutil com textos
+function createIceberg() {
+    const group = new THREE.Group();
+    group.position.set(400, 0, 0);
+    
+    // Helper function to create text sprite
+    function createTextSprite(text, fontSize, color, bgColor) {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = 512;
+        canvas.height = 64;
+        
+        // Background (transparent or subtle)
+        if(bgColor) {
+            context.fillStyle = bgColor;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // Text
+        context.font = `${fontSize}px 'Space Grotesk', Arial, sans-serif`;
+        context.fillStyle = color;
+        context.textAlign = 'right';
+        context.textBaseline = 'middle';
+        context.fillText(text, canvas.width - 20, canvas.height / 2);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+        
+        const spriteMaterial = new THREE.SpriteMaterial({ 
+            map: texture, 
+            transparent: true, 
+            depthTest: false
+        });
+        const sprite = new THREE.Sprite(spriteMaterial);
+        sprite.scale.set(6, 0.75, 1);
+        
+        return sprite;
+    }
+    
+    // Helper for icon sprites
+    function createIconSprite(emoji, size) {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = 128;
+        canvas.height = 128;
+        
+        context.font = `${size}px Arial`;
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.fillText(emoji, canvas.width / 2, canvas.height / 2);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        const spriteMaterial = new THREE.SpriteMaterial({ 
+            map: texture, 
+            transparent: true, 
+            depthTest: false
+        });
+        const sprite = new THREE.Sprite(spriteMaterial);
+        sprite.scale.set(size * 0.015, size * 0.015, 1);
+        
+        return sprite;
+    }
+    
+    // TITLE at top
+    const titleSprite = createTextSprite('Melhorando o Clima da', 32, '#ffffff', null);
+    titleSprite.position.set(-2, 5.5, 0);
+    titleSprite.scale.set(8, 1, 1);
+    group.add(titleSprite);
+    
+    const titleSprite2 = createTextSprite('Equipe Através da', 32, '#ffffff', null);
+    titleSprite2.position.set(-2, 4.8, 0);
+    titleSprite2.scale.set(8, 1, 1);
+    group.add(titleSprite2);
+    
+    const titleSprite3 = createTextSprite('Influência Sutil.', 32, '#ffb347', null);
+    titleSprite3.position.set(-2, 4.1, 0);
+    titleSprite3.scale.set(8, 1, 1);
+    group.add(titleSprite3);
+    
+    // WATER PLANE (linha d'água)
+    const waterGeometry = new THREE.PlaneGeometry(25, 20, 32, 32);
+    const waterMaterial = new THREE.MeshStandardMaterial({
+        color: 0x1a3a5c,
+        transparent: true,
+        opacity: 0.5,
+        side: THREE.DoubleSide,
+        metalness: 0.8,
+        roughness: 0.2
+    });
+    const water = new THREE.Mesh(waterGeometry, waterMaterial);
+    water.rotation.x = -Math.PI / 2;
+    water.position.y = 0.8;
+    water.position.x = 2;
+    group.add(water);
+    
+    // Water surface waves (sine wave line)
+    const wavePoints = [];
+    for(let i = 0; i <= 50; i++) {
+        const x = -10 + i * 0.5;
+        const y = 0.8 + Math.sin(i * 0.3) * 0.1;
+        wavePoints.push(new THREE.Vector3(x, y, 4));
+    }
+    const waveGeometry = new THREE.BufferGeometry().setFromPoints(wavePoints);
+    const waveMaterial = new THREE.LineBasicMaterial({
+        color: 0x6699bb,
+        transparent: true,
+        opacity: 0.6
+    });
+    const waveLine = new THREE.Line(waveGeometry, waveMaterial);
+    group.add(waveLine);
+    
+    // ICEBERG TIP (parte visível - acima da água)
+    const tipGeometry = new THREE.ConeGeometry(2, 3, 5);
+    const tipMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: 0xaaddff,
+        emissiveIntensity: 0.15,
+        metalness: 0.1,
+        roughness: 0.4,
+        transparent: true,
+        opacity: 0.92,
+        flatShading: true
+    });
+    const tip = new THREE.Mesh(tipGeometry, tipMaterial);
+    tip.position.set(4, 2.3, 0);
+    tip.rotation.y = 0.5;
+    group.add(tip);
+    
+    // ICEBERG BODY (parte submersa - maior, irregular)
+    const bodyGeometry = new THREE.ConeGeometry(4.5, 8, 6);
+    const bodyMaterial = new THREE.MeshStandardMaterial({
+        color: 0x88bbdd,
+        emissive: 0x224466,
+        emissiveIntensity: 0.25,
+        metalness: 0.15,
+        roughness: 0.5,
+        transparent: true,
+        opacity: 0.6,
+        flatShading: true
+    });
+    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+    body.position.set(4, -3.2, 0);
+    body.rotation.y = 0.3;
+    body.rotation.x = Math.PI; // Inverted cone
+    group.add(body);
+    
+    // Secondary underwater mass
+    const body2Geometry = new THREE.DodecahedronGeometry(2.5, 0);
+    const body2 = new THREE.Mesh(body2Geometry, bodyMaterial);
+    body2.position.set(2.5, -4, 1.5);
+    group.add(body2);
+    
+    // LABELS with indicators
+    const labels = [
+        { y: 2.8, text: 'Clima da Equipe', icon: '😊', color: '#ffb347', above: true },
+        { y: -0.8, text: 'Linguagem do Carisma', icon: '📖', color: '#00d4ff', above: false },
+        { y: -2.5, text: 'Contágio Emocional', icon: '🧠', color: '#00ff88', above: false },
+        { y: -4.2, text: 'Impacto nos Resultados', icon: '⚡', color: '#aa88ff', above: false },
+        { y: -5.8, text: 'Agentes de Mudança', icon: '🏃', color: '#ff6699', above: false }
+    ];
+    
+    labels.forEach((label, i) => {
+        // Text label
+        const textSprite = createTextSprite(label.text, 28, label.color, null);
+        textSprite.position.set(-4.5, label.y, 0);
+        textSprite.userData = { baseY: label.y, offset: i * 0.6 };
+        group.add(textSprite);
+        
+        // Icon
+        const iconSprite = createIconSprite(label.icon, 64);
+        iconSprite.position.set(-0.8, label.y, 0);
+        iconSprite.userData = { baseY: label.y, offset: i * 0.6 };
+        group.add(iconSprite);
+        
+        // Connection line (dashed for underwater)
+        const linePoints = [
+            new THREE.Vector3(-0.3, label.y, 0),
+            new THREE.Vector3(label.above ? 2.5 : 1.5, label.y, 0)
+        ];
+        const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePoints);
+        
+        if(label.above) {
+            const lineMaterial = new THREE.LineBasicMaterial({
+                color: label.color,
+                transparent: true,
+                opacity: 0.5
+            });
+            group.add(new THREE.Line(lineGeometry, lineMaterial));
+        } else {
+            const lineMaterial = new THREE.LineDashedMaterial({
+                color: label.color,
+                transparent: true,
+                opacity: 0.4,
+                dashSize: 0.3,
+                gapSize: 0.15
+            });
+            const line = new THREE.Line(lineGeometry, lineMaterial);
+            line.computeLineDistances();
+            group.add(line);
+        }
+    });
+    
+    // Floating particles (underwater atmosphere)
+    const bubbleCount = 40;
+    const bubbleGeometry = new THREE.BufferGeometry();
+    const bubblePositions = new Float32Array(bubbleCount * 3);
+    
+    for(let i = 0; i < bubbleCount; i++) {
+        const i3 = i * 3;
+        bubblePositions[i3] = 2 + (Math.random() - 0.5) * 8;
+        bubblePositions[i3 + 1] = -Math.random() * 7;
+        bubblePositions[i3 + 2] = (Math.random() - 0.5) * 5;
+    }
+    
+    bubbleGeometry.setAttribute('position', new THREE.BufferAttribute(bubblePositions, 3));
+    
+    const bubbleMaterial = new THREE.PointsMaterial({
+        color: 0x88ccff,
+        size: 0.06,
+        transparent: true,
+        opacity: 0.35,
+        blending: THREE.AdditiveBlending
+    });
+    
+    const bubbles = new THREE.Points(bubbleGeometry, bubbleMaterial);
+    group.add(bubbles);
+    
+    scene.add(group);
+    objects.push({ 
+        mesh: group, 
+        id: 8, 
+        type: 'iceberg', 
+        water: water,
+        waveLine: waveLine,
+        tip: tip,
+        body: body,
+        bubbles: bubbles
+    });
+}
+
+// Initialize all objects
+createNebula();
+createBrokenSignals();
+createBalanceScale();
+createQuadrant();
+createExperiment(); // Using the requested logic
+createBrain();
+createBook();
+createTeamNetwork();
+createIceberg();
+
+// NAVIGATION
+const waypoints = [
+    { x: 0, y: 0, z: 18 },
+    { x: 50, y: 0, z: 12 },
+    { x: 100, y: 0, z: 10 },
+    { x: 150, y: 0, z: 12 },
+    { x: 200, y: 0, z: 12 },
+    { x: 250, y: 0, z: 16 }, // Slide 5: câmera centralizada para destacar o experimento
+    { x: 300, y: 0, z: 12 },
+    { x: 350, y: 0, z: 14 },
+    { x: 400, y: 0, z: 18 }
+];
+
+let currentSlide = 0;
+const totalSlides = waypoints.length;
+const targetCamPos = new THREE.Vector3(waypoints[0].x, waypoints[0].y, waypoints[0].z);
+const targetLookAt = new THREE.Vector3(waypoints[0].x, 0, 0);
+
+function updateSlide() {
+    document.querySelectorAll('.content-card').forEach((el, idx) => {
+        if(idx === currentSlide) {
+            el.classList.add('active');
+        } else {
+            el.classList.remove('active');
+        }
+    });
+    
+    document.getElementById('btn-prev').disabled = currentSlide === 0;
+    document.getElementById('btn-next').innerHTML = currentSlide === totalSlides - 1 ? "↺" : "→";
+    
+    const pct = ((currentSlide + 1) / totalSlides) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('current-slide-num').innerText = currentSlide + 1;
+    
+    targetCamPos.set(waypoints[currentSlide].x, waypoints[currentSlide].y, waypoints[currentSlide].z);
+    targetLookAt.set(waypoints[currentSlide].x, 0, 0);
+}
+
+document.getElementById('btn-next').addEventListener('click', () => {
+    if(currentSlide < totalSlides - 1) {
+        currentSlide++;
+    } else {
+        currentSlide = 0;
+    }
+    updateSlide();
+});
+
+document.getElementById('btn-prev').addEventListener('click', () => {
+    if(currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+    }
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        if(currentSlide < totalSlides - 1) {
+            currentSlide++;
+        } else {
+            currentSlide = 0;
+        }
+        updateSlide();
+    } else if(e.key === 'ArrowLeft') {
+        if(currentSlide > 0) {
+            currentSlide--;
+            updateSlide();
+        }
+    }
+});
+
+// ANIMATION LOOP - Optimized to prevent memory leaks
+let animationId = null;
+let isPageVisible = true;
+
+// Pause animation when page is not visible to save resources
+document.addEventListener('visibilitychange', () => {
+    isPageVisible = !document.hidden;
+    if (!isPageVisible && animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    } else if (isPageVisible && !animationId) {
+        animate();
+    }
+});
+
+// Store original wave positions to avoid direct array modification
+const waveOriginalPositions = new Map();
+const bubbleOriginalPositions = new Map();
+
+function animate() {
+    if (!isPageVisible) return;
+    
+    animationId = requestAnimationFrame(animate);
+    
+    const time = clock.getElapsedTime();
+    
+    // Smooth camera movement
+    camera.position.lerp(targetCamPos, 0.035);
+    camera.lookAt(targetLookAt);
+    
+    // Animate objects
+    objects.forEach(obj => {
+        if(obj.type === 'nebula') {
+            obj.mesh.rotation.y += 0.0008;
+            obj.mesh.rotation.x = Math.sin(time * 0.2) * 0.1;
+        }
+        else if(obj.type === 'chaos') {
+            obj.mesh.rotation.y += 0.002;
+            obj.mesh.children.forEach(child => {
+                if(child.userData && child.userData.originalPos) {
+                    child.position.x = child.userData.originalPos.x + Math.sin(time * 2 + child.userData.offset) * 0.3;
+                    child.position.y = child.userData.originalPos.y + Math.cos(time * 1.5 + child.userData.offset) * 0.2;
+                }
+            });
+        }
+        else if(obj.type === 'balance') {
+            obj.beam.rotation.z = Math.sin(time * 0.8) * 0.05;
+            obj.warmth.position.y = 1 + Math.sin(time * 0.8) * 0.15;
+            obj.comp.position.y = 1 - Math.sin(time * 0.8) * 0.15;
+        }
+        else if(obj.type === 'quadrant') {
+            obj.star.rotation.y += 0.02;
+            obj.star.position.y = 2.8 + Math.sin(time * 2) * 0.2;
+        }
+        else if(obj.type === 'experiment') {
+            // Rotate the whole group gently
+            obj.mesh.rotation.y += 0.002;
+            
+            // Loop requested by user to animate floating marks
+            [obj.negGroup, obj.posGroup].forEach(group => {
+                if(group && group.userData && group.userData.mark) {
+                    const { mark } = group.userData;
+                    // Animação de flutuação (Bobbing)
+                    mark.position.y = 3.5 + Math.sin(time * 1.5) * 0.15;
+                }
+                
+                // Extra: Rotate actors inside groups for more life
+                const actor = group.children[0]; // Assuming first child is actor
+                if(actor) {
+                    actor.rotation.x += 0.01;
+                    actor.rotation.y += 0.015;
+                }
+            });
+        }
+        else if(obj.type === 'brain') {
+            obj.neurons.rotation.y += 0.002;
+            obj.outline.rotation.y -= 0.001;
+            obj.outline.rotation.x = Math.sin(time * 0.5) * 0.1;
+        }
+        else if(obj.type === 'book') {
+            obj.book.rotation.y = Math.sin(time * 0.5) * 0.3;
+            obj.book.position.y = Math.sin(time) * 0.15;
+            obj.particles.rotation.y += 0.005;
+        }
+        else if(obj.type === 'team') {
+            obj.mesh.rotation.y += 0.004;
+            obj.hub.rotation.x += 0.01;
+            obj.hub.rotation.y += 0.015;
+        }
+        else if(obj.type === 'iceberg') {
+            // Gentle bobbing motion for iceberg
+            const bobAmount = Math.sin(time * 0.8) * 0.06;
+            obj.tip.position.y = 2.3 + bobAmount;
+            obj.body.position.y = -3.2 + bobAmount;
+            
+            // OPTIMIZED: Animate wave line using position updates instead of direct array modification
+            // This prevents GPU buffer recreation on every frame
+            if (obj.waveLine && obj.waveLine.geometry) {
+                const positions = obj.waveLine.geometry.attributes.position;
+                if (!waveOriginalPositions.has(obj.waveLine)) {
+                    // Store original positions on first access
+                    const origPos = new Float32Array(positions.array);
+                    waveOriginalPositions.set(obj.waveLine, origPos);
+                }
+                
+                const origPos = waveOriginalPositions.get(obj.waveLine);
+                const newPos = positions.array;
+                // Only update Y coordinates (index + 1)
+                for(let i = 1; i < newPos.length; i += 3) {
+                    const x = origPos[i - 1];
+                    newPos[i] = origPos[i] + Math.sin(time * 2 + x * 0.5) * 0.12;
+                }
+                positions.needsUpdate = true;
+            }
+            
+            // OPTIMIZED: Bubble rising effect - use position updates with throttling
+            if (obj.bubbles && obj.bubbles.geometry) {
+                const positions = obj.bubbles.geometry.attributes.position;
+                if (!bubbleOriginalPositions.has(obj.bubbles)) {
+                    const origPos = new Float32Array(positions.array);
+                    bubbleOriginalPositions.set(obj.bubbles, origPos);
+                }
+                
+                const origPos = bubbleOriginalPositions.get(obj.bubbles);
+                const newPos = positions.array;
+                // Update bubble positions more efficiently
+                for(let i = 1; i < newPos.length; i += 3) {
+                    // Use modulo to create continuous loop effect without resetting
+                    const offset = (time * 0.5 + i * 0.1) % 7.5;
+                    newPos[i] = origPos[i] - 7.5 + offset;
+                    // Slight horizontal drift
+                    if (i % 9 === 0) {
+                        newPos[i - 1] = origPos[i - 1] + Math.sin(time + i * 0.01) * 0.5;
+                    }
+                }
+                positions.needsUpdate = true;
+            }
+            
+            // Subtle icon/label animation
+            obj.mesh.children.forEach(child => {
+                if(child.userData && child.userData.baseY !== undefined) {
+                    child.position.y = child.userData.baseY + Math.sin(time * 1.5 + child.userData.offset) * 0.05;
+                }
+            });
+        }
+    });
+    
+    // Animate lights
+    blueLight.position.x = -15 + Math.sin(time * 0.3) * 5;
+    orangeLight.position.y = -8 + Math.cos(time * 0.4) * 3;
+    
+    renderer.render(scene, camera);
+}
+
+// Handle resize with debouncing to prevent excessive recalculations
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }, 100);
+});
+
+// Cleanup function to prevent memory leaks
+function cleanup() {
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    }
+    
+    // Dispose geometries, materials, and textures
+    objects.forEach(obj => {
+        if (obj.mesh) {
+            obj.mesh.traverse((child) => {
+                if (child.geometry) {
+                    child.geometry.dispose();
+                }
+                if (child.material) {
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(mat => {
+                            if (mat.map) mat.map.dispose();
+                            mat.dispose();
+                        });
+                    } else {
+                        if (child.material.map) child.material.map.dispose();
+                        child.material.dispose();
+                    }
+                }
+            });
+            scene.remove(obj.mesh);
+        }
+    });
+    
+    // Clear maps
+    waveOriginalPositions.clear();
+    bubbleOriginalPositions.clear();
+    
+    // Dispose renderer
+    renderer.dispose();
+}
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', cleanup);
+window.addEventListener('pagehide', cleanup);
+
+updateSlide();
+animate();
+</script>
+</body>
+</html>
