@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dissecando um Prompt Profissional - Nestlé</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Kalam:wght@300;400;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper-bg: #f5f3eb;
+            --paper-lines: #c9e2f5;
+            --ink-black: #2d2d2d;
+            --ink-red: #c0392b;
+            --ink-blue: #2980b9;
+            --highlight-yellow: #fff3a3;
+            --highlight-green: #d4edda;
+            --highlight-blue: #d1ecf1;
+            --highlight-purple: #e2d9f3;
+            --nestle-red: #c8102e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--ink-black);
+            overflow: hidden;
+            cursor: default;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 90vw;
+            height: 90vh;
+            max-width: 1400px;
+            max-height: 900px;
+            background: var(--paper-bg);
+            background-image: 
+                linear-gradient(var(--paper-lines) 1px, transparent 1px);
+            background-size: 100% 32px;
+            background-position: 0 60px;
+            border-radius: 4px;
+            box-shadow: 
+                0 0 0 1px rgba(0,0,0,0.05),
+                0 20px 60px rgba(0,0,0,0.3),
+                0 1px 3px rgba(0,0,0,0.1);
+            padding: 50px 70px;
+            opacity: 0;
+            transform: translateX(100%) rotateY(-10deg);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 60px;
+            width: 2px;
+            height: 100%;
+            background: #e8b4b4;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) rotateY(0);
+            z-index: 10;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-100%) rotateY(10deg);
+        }
+
+        /* Typography */
+        .handwriting {
+            font-family: 'Caveat', cursive;
+        }
+
+        .handwriting-alt {
+            font-family: 'Patrick Hand', cursive;
+        }
+
+        .handwriting-neat {
+            font-family: 'Kalam', cursive;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Decorative elements */
+        .highlight {
+            background: linear-gradient(180deg, transparent 60%, var(--highlight-yellow) 60%);
+            padding: 0 4px;
+        }
+
+        .highlight-green {
+            background: linear-gradient(180deg, transparent 60%, var(--highlight-green) 60%);
+            padding: 0 4px;
+        }
+
+        .highlight-blue {
+            background: linear-gradient(180deg, transparent 60%, var(--highlight-blue) 60%);
+            padding: 0 4px;
+        }
+
+        .highlight-purple {
+            background: linear-gradient(180deg, transparent 60%, var(--highlight-purple) 60%);
+            padding: 0 4px;
+        }
+
+        .underline-sketch {
+            position: relative;
+            display: inline-block;
+        }
+
+        .underline-sketch::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10'%3E%3Cpath d='M0,5 Q25,0 50,5 T100,5' stroke='%23c0392b' stroke-width='2' fill='none'/%3E%3C/svg%3E") repeat-x;
+            background-size: contain;
+        }
+
+        .circle-highlight {
+            border: 3px solid var(--ink-red);
+            border-radius: 50%;
+            padding: 5px 15px;
+            display: inline-block;
+        }
+
+        .sticky-note {
+            background: #fff9b1;
+            padding: 20px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            font-family: 'Kalam', cursive;
+        }
+
+        .sticky-note.blue {
+            background: #d1ecf1;
+        }
+
+        .sticky-note.pink {
+            background: #f8d7da;
+        }
+
+        .sticky-note.green {
+            background: #d4edda;
+        }
+
+        .tape {
+            position: absolute;
+            width: 80px;
+            height: 25px;
+            background: rgba(255,255,255,0.6);
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-3deg);
+        }
+
+        /* Slide Cover */
+        .slide-cover {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .slide-cover h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: var(--ink-black);
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .slide-cover .subtitle {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.8rem;
+            color: var(--ink-red);
+            margin-bottom: 40px;
+        }
+
+        .instructor-box {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+            padding: 20px 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 3px 3px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .instructor-box img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--nestle-red);
+        }
+
+        .instructor-box .name {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            color: var(--ink-black);
+        }
+
+        .instructor-box .role {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .nestle-logo {
+            position: absolute;
+            bottom: 30px;
+            right: 70px;
+        }
+
+        .nestle-logo img {
+            height: 50px;
+            object-fit: contain;
+        }
+
+        /* Content slides */
+        .slide-content {
+            padding-left: 40px;
+        }
+
+        .slide-title {
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            color: var(--ink-black);
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .slide-body {
+            font-family: 'Kalam', cursive;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: var(--ink-black);
+        }
+
+        /* Annotation */
+        .annotation {
+            position: absolute;
+            font-family: 'Caveat', cursive;
+            color: var(--ink-red);
+            font-size: 1.3rem;
+            transform: rotate(-5deg);
+        }
+
+        .annotation.with-arrow::before {
+            content: '→';
+            margin-right: 8px;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px 25px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            position: relative;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid var(--ink-red);
+        }
+
+        .code-block .label {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--ink-red);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .code-block .highlight-line {
+            background: rgba(255, 255, 0, 0.1);
+            display: block;
+            margin: 0 -25px;
+            padding: 0 25px;
+        }
+
+        .code-comment {
+            color: #6a9955;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-important {
+            color: #f44747;
+            font-weight: bold;
+        }
+
+        /* Dissection blocks */
+        .dissection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .dissection-code {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .dissection-explanation {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .explanation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.06);
+            font-family: 'Kalam', cursive;
+            font-size: 1.05rem;
+        }
+
+        .explanation-item .icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        /* Section breakdown */
+        .section-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 2px 2px 15px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .section-card::before {
+            content: attr(data-section);
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--ink-red);
+            color: white;
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .section-card.green::before {
+            background: #27ae60;
+        }
+
+        .section-card.blue::before {
+            background: #2980b9;
+        }
+
+        .section-card.purple::before {
+            background: #8e44ad;
+        }
+
+        .section-card h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            color: var(--ink-black);
+        }
+
+        .section-card p {
+            font-family: 'Kalam', cursive;
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .section-card code {
+            background: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Rules visualization */
+        .rules-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rule-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 20px;
+            background: linear-gradient(90deg, #fff5f5 0%, white 100%);
+            border-left: 4px solid var(--ink-red);
+            border-radius: 0 8px 8px 0;
+            font-family: 'Kalam', cursive;
+            font-size: 1.1rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .rule-row .badge {
+            background: var(--ink-red);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Hierarchy */
+        .hierarchy-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .hierarchy-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 2px 2px 12px rgba(0,0,0,0.08);
+            font-family: 'Kalam', cursive;
+            font-size: 1.15rem;
+            min-width: 350px;
+            transition: all 0.3s ease;
+        }
+
+        .hierarchy-box:hover {
+            transform: scale(1.03);
+            box-shadow: 4px 4px 20px rgba(0,0,0,0.12);
+        }
+
+        .hierarchy-box .num {
+            width: 32px;
+            height: 32px;
+            background: var(--ink-red);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .hierarchy-arrow {
+            color: var(--ink-red);
+            font-size: 1.2rem;
+        }
+
+        /* Practice slide */
+        .practice-slide {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .practice-icon {
+            font-size: 5rem;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .practice-title {
+            font-family: 'Caveat', cursive;
+            font-size: 3.5rem;
+            color: var(--ink-black);
+            margin-bottom: 15px;
+        }
+
+        .practice-subtitle {
+            font-family: 'Kalam', cursive;
+            font-size: 1.4rem;
+            color: #666;
+        }
+
+        /* Checklist */
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.06);
+            font-family: 'Kalam', cursive;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            transform: translateX(5px);
+            background: #f8f8f8;
+        }
+
+        .checklist-item .checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--ink-red);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item.checked .checkbox {
+            background: var(--ink-red);
+            color: white;
+        }
+
+        .checklist-item.checked .checkbox::after {
+            content: '✓';
+            font-size: 0.9rem;
+        }
+
+        /* Navigation */
+        .nav-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-hint kbd {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--nestle-red);
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: white;
+            background: var(--ink-black);
+            padding: 8px 20px;
+            border-radius: 20px;
+            z-index: 100;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Two column layout */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Decorations */
+        .deco-stars {
+            color: var(--ink-red);
+            font-size: 1.5rem;
+        }
+
+        .deco-spiral {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--ink-red);
+            border-radius: 50%;
+            border-right-color: transparent;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .slide {
+                padding: 35px 45px;
+            }
+            
+            .slide-cover h1 {
+                font-size: 3rem;
+            }
+            
+            .slide-title {
+                font-size: 2.3rem;
+            }
+            
+            .two-columns, .dissection, .checklist {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        .slide::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .slide::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        .slide::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="slide-counter" id="slideCounter">1 / 12</div>
+
+    <div class="slide-container">
+        <!-- Slide 1: Cover -->
+        <div class="slide slide-cover active" data-slide="1">
+            <div class="deco-stars" style="position: absolute; top: 80px; left: 100px;">✦ ✦</div>
+            <div class="deco-stars" style="position: absolute; top: 120px; right: 150px;">✦</div>
+            <div style="position: absolute; bottom: 150px; left: 100px;">
+                <div class="deco-spiral"></div>
+            </div>
+            
+            <h1 class="slide-up">Dissecando um<br>Prompt Profissional</h1>
+            <p class="subtitle slide-up" style="animation-delay: 0.2s">Anatomia de um Prompt Enhancer</p>
+            
+            <div class="instructor-box slide-up" style="animation-delay: 0.4s">
+                <div class="tape"></div>
+                <img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=lucas.nascimento1@br.nestle.com" alt="Lucas Nascimento" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23c8102e%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22>LN</text></svg>'">
+                <div>
+                    <div class="name">Lucas Nascimento</div>
+                    <div class="role">Data Operations Team</div>
+                </div>
+            </div>
+            
+            <div class="nestle-logo">
+                <img src="https://logo-teka.com/wp-content/uploads/2025/06/nestle-logo.png" alt="Nestlé">
+            </div>
+            
+            <div class="annotation" style="bottom: 100px; right: 200px; transform: rotate(5deg);">
+                → Navegue com as setas!
+            </div>
+        </div>
+
+        <!-- Slide 2: O que vamos aprender -->
+        <div class="slide slide-content" data-slide="2">
+            <h2 class="slide-title">
+                <span class="underline-sketch">O que vamos aprender?</span>
+            </h2>
+            
+            <div class="slide-body">
+                <p style="margin-bottom: 25px; font-size: 1.4rem;">
+                    Vamos <span class="highlight">destrinchar cada parte</span> de um prompt profissional
+                    e entender por que cada elemento existe.
+                </p>
+                
+                <div class="two-columns" style="margin-top: 30px;">
+                    <div class="section-card" data-section="Seção 1">
+                        <h3>🎭 Identidade & Missão</h3>
+                        <p>Como definir quem o agente é e o que ele faz</p>
+                    </div>
+                    
+                    <div class="section-card green" data-section="Seção 2">
+                        <h3>📋 Os 6 Princípios</h3>
+                        <p>Regras que o agente aplica silenciosamente</p>
+                    </div>
+                    
+                    <div class="section-card blue" data-section="Seção 3">
+                        <h3>🚫 Regras de Controle</h3>
+                        <p>O que o agente NUNCA deve fazer</p>
+                    </div>
+                    
+                    <div class="section-card purple" data-section="Seção 4">
+                        <h3>📝 Exemplo & Ativação</h3>
+                        <p>Demonstração prática e comando final</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sticky-note" style="position: absolute; bottom: 60px; right: 80px; max-width: 220px;">
+                Cada parte tem uma função específica!
+            </div>
+        </div>
+
+        <!-- Slide 3: Visão Geral do Prompt -->
+        <div class="slide slide-content" data-slide="3">
+            <h2 class="slide-title">Visão Geral do Prompt</h2>
+            
+            <div class="hierarchy-flow">
+                <div class="hierarchy-box">
+                    <span class="num">1</span>
+                    <span><strong>IDENTIDADE</strong> — "Você é um assistente especializado..."</span>
+                </div>
+                <div class="hierarchy-arrow">↓</div>
+                <div class="hierarchy-box">
+                    <span class="num">2</span>
+                    <span><strong>MISSÃO</strong> — "Sua função é transformar prompts..."</span>
+                </div>
+                <div class="hierarchy-arrow">↓</div>
+                <div class="hierarchy-box">
+                    <span class="num">3</span>
+                    <span><strong>METODOLOGIA</strong> — Os 6 princípios de otimização</span>
+                </div>
+                <div class="hierarchy-arrow">↓</div>
+                <div class="hierarchy-box">
+                    <span class="num">4</span>
+                    <span><strong>RESTRIÇÕES</strong> — Regras críticas (NUNCA...)</span>
+                </div>
+                <div class="hierarchy-arrow">↓</div>
+                <div class="hierarchy-box">
+                    <span class="num">5</span>
+                    <span><strong>EXEMPLO</strong> — Before/After concreto</span>
+                </div>
+                <div class="hierarchy-arrow">↓</div>
+                <div class="hierarchy-box">
+                    <span class="num">6</span>
+                    <span><strong>ATIVAÇÃO</strong> — "Aguarde o prompt do usuário..."</span>
+                </div>
+            </div>
+            
+            <div class="annotation" style="top: 130px; right: 100px; transform: rotate(5deg);">
+                Esta estrutura funciona! ★
+            </div>
+        </div>
+
+        <!-- Slide 4: Identidade & Missão -->
+        <div class="slide slide-content" data-slide="4">
+            <h2 class="slide-title">
+                <span class="circle-highlight">1</span> Identidade & Missão
+            </h2>
+            
+            <div class="dissection">
+                <div class="dissection-code">
+                    <span class="code-comment"># Prompt Enhancer - Instruções para Copilot</span><br><br>
+                    <span class="code-keyword">Você é</span> um assistente <span class="code-string">especializado em otimização de prompts de IA</span>.<br><br>
+                    <span class="code-keyword">Sua função é</span> <span class="code-string">transformar prompts básicos em prompts profissionais e eficazes</span>.
+                </div>
+                
+                <div class="dissection-explanation">
+                    <div class="explanation-item">
+                        <span class="icon">🎭</span>
+                        <span><strong>Persona específica:</strong> Define expertise em "otimização de prompts"</span>
+                    </div>
+                    <div class="explanation-item">
+                        <span class="icon">🎯</span>
+                        <span><strong>Objetivo claro:</strong> "transformar" é um verbo de ação específico</span>
+                    </div>
+                    <div class="explanation-item">
+                        <span class="icon">📊</span>
+                        <span><strong>Critério de sucesso:</strong> "profissionais e eficazes"</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sticky-note blue" style="position: absolute; bottom: 50px; right: 80px; max-width: 260px; transform: rotate(2deg);">
+                💡 Definir persona ativa conhecimento especializado do modelo!
+            </div>
+        </div>
+
+        <!-- Slide 5: Os 6 Princípios (parte 1) -->
+        <div class="slide slide-content" data-slide="5">
+            <h2 class="slide-title">
+                <span class="circle-highlight">2</span> Os 6 Princípios <span style="color: #666; font-size: 0.6em;">(1-3)</span>
+            </h2>
+            
+            <div class="code-block" style="margin-bottom: 25px;">
+                <span class="label">Trecho do Prompt</span>
+                <span class="code-comment">Quando o usuário fornecer um prompt básico, você deve<br>reescrevê-lo aplicando <span class="code-important">silenciosamente</span> os seguintes princípios:</span><br><br>
+                <span class="highlight-line">1. Comece com um <span class="code-string">verbo de ação claro</span> especificando o resultado</span>
+                <span class="highlight-line">2. Forneça <span class="code-string">contexto relevante</span> incluindo background e critérios</span>
+                <span class="highlight-line">3. Inclua <span class="code-string">exemplos ou frameworks</span> quando apropriado</span>
+            </div>
+            
+            <div class="two-columns">
+                <div class="explanation-item">
+                    <span class="icon">✨</span>
+                    <span><strong>"Silenciosamente"</strong> = aplica os princípios sem explicar o que está fazendo</span>
+                </div>
+                <div class="explanation-item">
+                    <span class="icon">🔧</span>
+                    <span><strong>Verbo de ação</strong> = estrutura a instrução com diretrizes explícitas</span>
+                </div>
+                <div class="explanation-item">
+                    <span class="icon">📚</span>
+                    <span><strong>Contexto</strong> = equilibra orientação suficiente com eficiência</span>
+                </div>
+                <div class="explanation-item">
+                    <span class="icon">💡</span>
+                    <span><strong>Exemplos</strong> = demonstram ao invés de apenas descrever</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Os 6 Princípios (parte 2) -->
+        <div class="slide slide-content" data-slide="6">
+            <h2 class="slide-title">
+                <span class="circle-highlight">2</span> Os 6 Princípios <span style="color: #666; font-size: 0.6em;">(4-6)</span>
+            </h2>
+            
+            <div class="code-block" style="margin-bottom: 25px;">
+                <span class="label">Trecho do Prompt</span>
+                <span class="highlight-line">4. Defina uma <span class="code-string">persona específica</span> com expertise relevante</span>
+                <span class="highlight-line">5. Especifique o <span class="code-string">formato de saída</span> desejado (tabela, lista...)</span>
+                <span class="highlight-line">6. Indique o <span class="code-string">tom apropriado</span> (formal, casual, profissional...)</span>
+            </div>
+            
+            <div class="two-columns">
+                <div class="explanation-item">
+                    <span class="icon">🎭</span>
+                    <span><strong>Persona</strong> = ativa conhecimento especializado do modelo</span>
+                </div>
+                <div class="explanation-item">
+                    <span class="icon">📋</span>
+                    <span><strong>Formato</strong> = garante output previsível e utilizável</span>
+                </div>
+                <div class="explanation-item">
+                    <span class="icon">🎨</span>
+                    <span><strong>Tom</strong> = influencia criatividade e formalidade da resposta</span>
+                </div>
+            </div>
+            
+            <div class="sticky-note green" style="position: absolute; bottom: 50px; right: 80px; max-width: 250px; transform: rotate(-2deg);">
+                Estes princípios são aplicados em CADA prompt que o agente otimiza!
+            </div>
+        </div>
+
+        <!-- Slide 7: Regras Críticas -->
+        <div class="slide slide-content" data-slide="7">
+            <h2 class="slide-title">
+                <span class="circle-highlight">3</span> Regras Críticas
+            </h2>
+            
+            <p class="slide-body" style="margin-bottom: 20px;">
+                O que o agente <span class="highlight">NÃO deve fazer</span> é tão importante quanto o que deve!
+            </p>
+            
+            <div class="rules-visual">
+                <div class="rule-row" style="animation-delay: 0.1s">
+                    <span class="badge">NUNCA</span>
+                    <span>Mencionar os princípios no output</span>
+                </div>
+                <div class="rule-row" style="animation-delay: 0.2s">
+                    <span class="badge">NUNCA</span>
+                    <span>Usar marcadores como (TAREFA), (CONTEXTO), (PERSONA)</span>
+                </div>
+                <div class="rule-row" style="animation-delay: 0.3s">
+                    <span class="badge">NUNCA</span>
+                    <span>Adicionar frases introdutórias ou perguntas no final</span>
+                </div>
+                <div class="rule-row" style="animation-delay: 0.4s">
+                    <span class="badge">NUNCA</span>
+                    <span>Formatar com bullet points ou listas numeradas</span>
+                </div>
+                <div class="rule-row" style="animation-delay: 0.5s">
+                    <span class="badge">NUNCA</span>
+                    <span>Quebrar o prompt em seções com títulos</span>
+                </div>
+            </div>
+            
+            <div class="annotation" style="bottom: 70px; right: 100px; transform: rotate(3deg);">
+                CAIXA ALTA = prioridade máxima! ★
+            </div>
+        </div>
+
+        <!-- Slide 8: Por que as regras existem -->
+        <div class="slide slide-content" data-slide="8">
+            <h2 class="slide-title">Por que essas regras?</h2>
+            
+            <div class="two-columns" style="margin-top: 20px;">
+                <div class="column">
+                    <div class="section-card" data-section="Problema">
+                        <h3>🤖 Comportamento padrão da IA</h3>
+                        <p>Modelos tendem a adicionar "meta-comentários", explicar o que estão fazendo, e usar formatação excessiva.</p>
+                    </div>
+                    
+                    <div class="section-card blue" data-section="Solução">
+                        <h3>🎯 Instruções negativas</h3>
+                        <p>Usar <code>NUNCA</code> em CAIXA ALTA cria ênfase e prioridade. O modelo entende que são guardrails.</p>
+                    </div>
+                </div>
+                
+                <div class="column">
+                    <div class="section-card green" data-section="Resultado">
+                        <h3>✅ Output limpo</h3>
+                        <p>O prompt otimizado sai como texto corrido, pronto para usar, sem formatação ou explicações extras.</p>
+                    </div>
+                    
+                    <div class="sticky-note" style="transform: rotate(-3deg);">
+                        💡 Controlar comportamentos indesejados é tão importante quanto definir os desejados!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: O Exemplo -->
+        <div class="slide slide-content" data-slide="9">
+            <h2 class="slide-title">
+                <span class="circle-highlight">4</span> O Exemplo
+            </h2>
+            
+            <p class="slide-body" style="margin-bottom: 20px;">
+                Um exemplo <span class="highlight">before/after</span> mostra exatamente o comportamento esperado:
+            </p>
+            
+            <div class="dissection">
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="section-card" data-section="❌ Input" style="margin: 0;">
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 1rem;">
+                            "Me ajude a escolher uma ação de tecnologia"
+                        </p>
+                    </div>
+                    
+                    <div class="section-card green" data-section="✓ Output" style="margin: 0;">
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6;">
+                            "Você é um analista de investimentos experiente com talento para prever tendências de mercado. Elabore um relatório detalhado de investimento explicando os motivos para selecionar uma ação de tecnologia específica..."
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="dissection-explanation">
+                    <div class="explanation-item">
+                        <span class="icon">🎭</span>
+                        <span>Define <strong>persona</strong> (analista experiente)</span>
+                    </div>
+                    <div class="explanation-item">
+                        <span class="icon">🎯</span>
+                        <span>Usa <strong>verbo de ação</strong> (Elabore)</span>
+                    </div>
+                    <div class="explanation-item">
+                        <span class="icon">📋</span>
+                        <span>Especifica <strong>formato</strong> (relatório com seções)</span>
+                    </div>
+                    <div class="explanation-item">
+                        <span class="icon">🎨</span>
+                        <span>Define <strong>tom</strong> (profissional e confiante)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Ativação -->
+        <div class="slide slide-content" data-slide="10">
+            <h2 class="slide-title">
+                <span class="circle-highlight">5</span> Reforço & Ativação
+            </h2>
+            
+            <div class="code-block" style="margin-bottom: 25px;">
+                <span class="label">Final do Prompt</span>
+                <span class="code-important">**IMPORTANTE:**</span> O prompt otimizado deve ser escrito como<br>
+                um texto fluido e contínuo, sem formatação de lista.<br><br>
+                Após escrever o prompt otimizado, você deve <span class="code-important">parar completamente</span>.<br>
+                Não faça perguntas, não ofereça alternativas, não sugira modificações.<br><br>
+                <span class="code-string">Aguarde o prompt básico do usuário e transforme-o<br>seguindo essas diretrizes.</span>
+            </div>
+            
+            <div class="two-columns">
+                <div class="explanation-item">
+                    <span class="icon">🔄</span>
+                    <span><strong>Repetição estratégica:</strong> Reforça regras críticas porque modelos têm "recency bias"</span>
+                </div>
+                <div class="explanation-item">
+                    <span class="icon">🚀</span>
+                    <span><strong>Comando de ativação:</strong> "Aguarde o prompt..." põe o agente em modo de espera</span>
+                </div>
+            </div>
+            
+            <div class="sticky-note pink" style="position: absolute; bottom: 60px; right: 80px; max-width: 250px; transform: rotate(2deg);">
+                Em conversas longas, a aderência às instruções pode degradar. Por isso repetimos!
+            </div>
+        </div>
+
+        <!-- Slide 11: Practice -->
+        <div class="slide practice-slide" data-slide="11">
+            <div class="practice-icon">🚀</div>
+            <h2 class="practice-title">Hora da Prática!</h2>
+            <p class="practice-subtitle">Vamos inserir no Copilot Studio</p>
+            
+            <div class="annotation" style="bottom: 180px; right: 250px; transform: rotate(-3deg); font-size: 1.5rem;">
+                → Alt+Tab time!
+            </div>
+        </div>
+
+        <!-- Slide 12: Checklist -->
+        <div class="slide slide-content" data-slide="12">
+            <h2 class="slide-title">Checklist: Criando seu Prompt <span class="deco-stars">✦</span></h2>
+            
+            <div class="checklist">
+                <div class="checklist-item" onclick="this.classList.toggle('checked')">
+                    <div class="checkbox"></div>
+                    <span>Defini uma <strong>persona específica</strong> com expertise?</span>
+                </div>
+                <div class="checklist-item" onclick="this.classList.toggle('checked')">
+                    <div class="checkbox"></div>
+                    <span>Especifiquei a <strong>missão/função</strong> claramente?</span>
+                </div>
+                <div class="checklist-item" onclick="this.classList.toggle('checked')">
+                    <div class="checkbox"></div>
+                    <span>Listei os <strong>princípios/metodologia</strong> a seguir?</span>
+                </div>
+                <div class="checklist-item" onclick="this.classList.toggle('checked')">
+                    <div class="checkbox"></div>
+                    <span>Adicionei <strong>regras de controle</strong> (NUNCA...)?</span>
+                </div>
+                <div class="checklist-item" onclick="this.classList.toggle('checked')">
+                    <div class="checkbox"></div>
+                    <span>Incluí um <strong>exemplo concreto</strong> before/after?</span>
+                </div>
+                <div class="checklist-item" onclick="this.classList.toggle('checked')">
+                    <div class="checkbox"></div>
+                    <span>Reforcei regras importantes no <strong>final</strong>?</span>
+                </div>
+                <div class="checklist-item" onclick="this.classList.toggle('checked')">
+                    <div class="checkbox"></div>
+                    <span>Terminei com um <strong>comando de ativação</strong>?</span>
+                </div>
+                <div class="checklist-item" onclick="this.classList.toggle('checked')">
+                    <div class="checkbox"></div>
+                    <span>Usei <strong>CAIXA ALTA</strong> para ênfase?</span>
+                </div>
+            </div>
+            
+            <div class="annotation" style="bottom: 80px; right: 100px;">
+                clique para marcar ✓
+            </div>
+            
+            <div class="nestle-logo" style="bottom: 30px;">
+                <img src="https://logo-teka.com/wp-content/uploads/2025/06/nestle-logo.png" alt="Nestlé">
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-hint">
+        <span><kbd>←</kbd> <kbd>→</kbd> Navegar</span>
+        <span><kbd>Home</kbd> Início</span>
+        <span><kbd>End</kbd> Fim</span>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progressBar');
+        const slideCounter = document.getElementById('slideCounter');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function updateSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active', 'prev');
+                if (i === index) {
+                    slide.classList.add('active');
+                } else if (i < index) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            const progress = ((index + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+            slideCounter.textContent = `${index + 1} / ${totalSlides}`;
+
+            // Reset animations for rules on slide 7
+            if (index === 6) {
+                const rules = slides[6].querySelectorAll('.rule-row');
+                rules.forEach(rule => {
+                    rule.style.animation = 'none';
+                    rule.offsetHeight;
+                    rule.style.animation = null;
+                });
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide(currentSlide);
+            }
+        }
+
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                currentSlide = index;
+                updateSlide(currentSlide);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case ' ':
+                case 'PageDown':
+                    e.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                case 'PageUp':
+                    e.preventDefault();
+                    prevSlide();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    goToSlide(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    goToSlide(totalSlides - 1);
+                    break;
+            }
+        });
+
+        // Click navigation (excluding interactive elements)
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.checklist-item')) return;
+            if (e.target.closest('.instructor-box')) return;
+            
+            const rect = document.body.getBoundingClientRect();
+            const x = e.clientX;
+            
+            if (x > rect.width / 2) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        });
+
+        // Touch support
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        });
+
+        // Initialize
+        updateSlide(0);
+    </script>
+</body>
+</html>
