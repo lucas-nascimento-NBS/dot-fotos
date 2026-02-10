@@ -3,21 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dissecando um Prompt Profissional - Nestlé</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Kalam:wght@300;400;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>Resumo Estruturado (Capítulos 1–10) | A Linguagem Secreta do Carisma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=Bitter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --paper-bg: #f5f3eb;
-            --paper-lines: #c9e2f5;
-            --ink-black: #2d2d2d;
-            --ink-red: #c0392b;
-            --ink-blue: #2980b9;
-            --highlight-yellow: #fff3a3;
-            --highlight-green: #d4edda;
-            --highlight-blue: #d1ecf1;
-            --highlight-purple: #e2d9f3;
-            --nestle-red: #c8102e;
+            --paper-cream: #f5f0e1;
+            --paper-aged: #e8dcc4;
+            --paper-dark: #d4c4a8;
+            --ink-black: #2c2416;
+            --ink-brown: #4a3c2a;
+            --ink-light: #6b5a42;
+            --accent-gold: #b8956e;
+            --accent-rust: #a65d3f;
+            --accent-burgundy: #7a3d3d;
+            --shadow-soft: rgba(44, 36, 22, 0.08);
+            --shadow-medium: rgba(44, 36, 22, 0.15);
+            
+            /* Font variables - Default: Lora + Merriweather */
+            --font-display: 'Lora', Georgia, serif;
+            --font-body: 'Merriweather', Georgia, serif;
+            --font-accent: 'Merriweather', Georgia, serif;
         }
+
+        /* Font Set 2: Lora + Merriweather */
+        body.font-set-2 {
+            --font-display: 'Lora', Georgia, serif;
+            --font-body: 'Merriweather', Georgia, serif;
+            --font-accent: 'Merriweather', Georgia, serif;
+        }
+
+        /* Font Set 3: Source Serif + Libre Baskerville */
+        body.font-set-3 {
+            --font-display: 'Source Serif 4', Georgia, serif;
+            --font-body: 'Libre Baskerville', Georgia, serif;
+            --font-accent: 'Source Serif 4', Georgia, serif;
+        }
+
+        /* Font Set 4: DM Serif + DM Sans (Moderno) */
+        body.font-set-4 {
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-accent: 'DM Sans', sans-serif;
+        }
+
+        /* Font Set 5: Fraunces + Outfit (Contemporâneo) */
+        body.font-set-5 {
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-accent: 'Outfit', sans-serif;
+        }
+
+        /* Font Set 6: Bitter + Spectral (Clássico Robusto) */
+        body.font-set-6 {
+            --font-display: 'Bitter', Georgia, serif;
+            --font-body: 'Spectral', Georgia, serif;
+            --font-accent: 'Bitter', Georgia, serif;
+        }
+
+        /* Font Switcher Styles - Hidden */
+        .font-switcher {
+            display: none;
+        }
+
+        .font-switcher-toggle {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            border: none;
+            padding: 0.8rem 0.6rem;
+            cursor: pointer;
+            font-family: var(--font-accent);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            border-radius: 8px 0 0 8px;
+            transition: all 0.3s ease;
+            box-shadow: -3px 0 15px var(--shadow-medium);
+        }
+
+        .font-switcher-toggle:hover {
+            background: var(--accent-rust);
+            padding-left: 0.8rem;
+        }
+
+        .font-switcher-panel {
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--paper-cream);
+            border: 1px solid var(--paper-dark);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: -5px 0 30px var(--shadow-medium);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            min-width: 280px;
+        }
+
+        .font-switcher.active .font-switcher-panel {
+            opacity: 1;
+            visibility: visible;
+            right: calc(100% + 10px);
+        }
+
+        .font-switcher-panel h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--ink-black);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--paper-dark);
+        }
+
+        .font-option {
+            display: block;
+            width: 100%;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            background: transparent;
+            border: 1px solid var(--paper-dark);
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .font-option:hover {
+            background: var(--paper-aged);
+            border-color: var(--accent-gold);
+        }
+
+        .font-option.active {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: white;
+        }
+
+        .font-option .font-name {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .font-option .font-preview {
+            font-size: 0.75rem;
+            color: var(--ink-light);
+            opacity: 0.8;
+        }
+
+        .font-option.active .font-preview {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Preview fonts inline */
+        .font-option[data-set="1"] .font-name { font-family: 'Playfair Display', serif; }
+        .font-option[data-set="2"] .font-name { font-family: 'Lora', serif; }
+        .font-option[data-set="3"] .font-name { font-family: 'Source Serif 4', serif; }
+        .font-option[data-set="4"] .font-name { font-family: 'DM Serif Display', serif; }
+        .font-option[data-set="5"] .font-name { font-family: 'Fraunces', serif; }
+        .font-option[data-set="6"] .font-name { font-family: 'Bitter', serif; }
 
         * {
             margin: 0;
@@ -25,1039 +173,2197 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--ink-black);
-            overflow: hidden;
-            cursor: default;
-        }
-
-        /* Slide System */
-        .slide-container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 1000px;
-        }
-
-        .slide {
-            position: absolute;
-            width: 90vw;
-            height: 90vh;
-            max-width: 1400px;
-            max-height: 900px;
-            background: var(--paper-bg);
-            background-image: linear-gradient(var(--paper-lines) 1px, transparent 1px);
-            background-size: 100% 32px;
-            background-position: 0 60px;
-            border-radius: 4px;
-            box-shadow: 
-                0 0 0 1px rgba(0,0,0,0.05),
-                0 20px 60px rgba(0,0,0,0.3),
-                0 1px 3px rgba(0,0,0,0.1);
-            padding: 50px 70px;
-            opacity: 0;
-            transform: translateX(100%) rotateY(-10deg);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .slide::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 60px;
-            width: 2px;
-            height: 100%;
-            background: #e8b4b4;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .slide.active {
-            opacity: 1;
-            transform: translateX(0) rotateY(0);
-            z-index: 10;
-        }
-
-        .slide.prev {
-            opacity: 0;
-            transform: translateX(-100%) rotateY(10deg);
-        }
-
-        /* Animations */
-        .slide-up {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideUp 0.6s ease forwards;
-        }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            animation: fadeIn 0.8s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* Decorations */
-        .deco-stars {
-            color: var(--ink-red);
-            font-size: 1.5rem;
-        }
-
-        .star-spin {
-            display: inline-block;
-            animation: starRotate 3s linear infinite;
-        }
-
-        .star-float {
-            display: inline-block;
-            animation: starFloat 2.5s ease-in-out infinite;
-        }
-
-        @keyframes starRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes starFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* Robot decoration */
-        .robot-container {
-            position: relative;
-            display: inline-block;
-            animation: robotWiggle 1.2s steps(1) infinite;
-            transform-origin: center;
-        }
-
-        @keyframes robotWiggle {
-            0%, 100% { transform: rotate(-8deg); }
-            50% { transform: rotate(8deg); }
-        }
-
-        .robot-photo {
-            width: 240px;
-            height: 240px;
-            object-fit: contain;
-            filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.25));
-            display: block;
-        }
-
-        .speech-bubble {
-            position: absolute;
-            top: 20px;
-            right: -120px;
-            background: white;
-            padding: 15px 28px;
-            border-radius: 25px;
-            border: 4px solid var(--ink-black);
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--ink-black);
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
-            white-space: nowrap;
-        }
-
-        .speech-bubble::before {
-            content: '';
-            position: absolute;
-            bottom: 15px;
-            left: -18px;
-            width: 0;
-            height: 0;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-right: 20px solid var(--ink-black);
-        }
-
-        .speech-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: 18px;
-            left: -10px;
-            width: 0;
-            height: 0;
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-            border-right: 17px solid white;
-        }
-
-        /* Typography & Styles */
-        .handwriting { font-family: 'Caveat', cursive; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        .highlight { background: linear-gradient(180deg, transparent 60%, var(--highlight-yellow) 60%); padding: 0 4px; }
-        
-        .underline-sketch {
-            position: relative;
-            display: inline-block;
-        }
-
-        .underline-sketch::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10'%3E%3Cpath d='M0,5 Q25,0 50,5 T100,5' stroke='%23c0392b' stroke-width='2' fill='none'/%3E%3C/svg%3E") repeat-x;
-            background-size: contain;
-        }
-
-        .circle-highlight {
-            border: 3px solid var(--ink-red);
-            border-radius: 50%;
-            padding: 5px 15px;
-            display: inline-block;
-        }
-
-        /* Annotation */
-        .annotation {
-            position: absolute;
-            font-family: 'Caveat', cursive;
-            color: var(--ink-red);
-            font-size: 1.3rem;
-            transform: rotate(-5deg);
-        }
-
-        .annotation.with-arrow::before {
-            content: '→';
-            margin-right: 8px;
-        }
-
-        /* Sticky Notes */
-        .sticky-note {
-            background: #fff9b1;
-            padding: 20px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-            transform: rotate(-2deg);
-            font-family: 'Kalam', cursive;
-        }
-
-        .sticky-note.blue { background: #d1ecf1; }
-        .sticky-note.pink { background: #f8d7da; }
-        .sticky-note.green { background: #d4edda; }
-
-        .slide-title {
-            font-family: 'Caveat', cursive;
-            font-size: 3rem;
-            color: var(--ink-black);
-            margin-bottom: 30px;
-        }
-
-        .slide-body {
-            font-family: 'Kalam', cursive;
-            font-size: 1.3rem;
-            line-height: 1.8;
-            color: var(--ink-black);
-        }
-
-        .slide-content {
-            padding-left: 40px;
-        }
-
-        /* --- Dissection Paper Specific Styles --- */
-        .dissection-layout {
-            display: flex;
-            gap: 40px;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .paper-wrapper {
-            flex: 1.2;
-            background: white;
-            border-radius: 2px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .paper-header {
-            background: #f8f8f8;
-            padding: 10px 20px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: #666;
-            flex-shrink: 0;
-        }
-
-        .paper-content {
-            padding: 40px;
-            overflow-y: auto;
-            flex-grow: 1;
-            font-family: 'Inter', sans-serif;
-            color: #333;
-            line-height: 1.6;
+        html {
             scroll-behavior: smooth;
         }
 
-        /* Markdown Mode Styles */
-        .paper-wrapper.markdown-mode {
-            background: #1e1e1e;
+        body {
+            font-family: var(--font-body);
+            background: var(--paper-cream);
+            color: var(--ink-black);
+            font-size: 18px;
+            line-height: 1.7;
+            overflow-x: hidden;
         }
 
-        .paper-wrapper.markdown-mode .paper-header {
-            background: #252526;
-            border-bottom-color: #333;
-            color: #999;
+        /* Texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
         }
 
-        .paper-wrapper.markdown-mode .paper-content {
-            font-family: 'JetBrains Mono', monospace;
-            color: #d4d4d4;
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to bottom, var(--paper-cream) 0%, transparent 100%);
+            padding: 1.5rem 2rem;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.5s forwards;
         }
 
-        /* Semantic styles to Markdown syntax mapping */
-        .paper-content h1 { font-size: 1.8rem; margin-bottom: 1rem; color: #2d2d2d; font-weight: 700; }
-        .paper-content h2 { font-size: 1.4rem; margin-top: 1.5rem; margin-bottom: 1rem; color: #444; border-bottom: 1px solid #eee; padding-bottom: 5px;}
-        .paper-content p { margin-bottom: 1rem; }
-        .paper-content ul, .paper-content ol { margin-bottom: 1rem; padding-left: 20px; }
-        .paper-content li { margin-bottom: 0.5rem; }
-        .paper-content blockquote { border-left: 4px solid #ddd; padding-left: 15px; color: #666; font-style: italic; margin: 1rem 0; }
-        .paper-content strong { color: var(--ink-red); }
-
-        /* Markdown Mode Overrides */
-        .paper-wrapper.markdown-mode h1 { font-size: 1.1rem; color: #569cd6; font-weight: normal; margin-bottom: 1rem; }
-        .paper-wrapper.markdown-mode h1::before { content: '# '; color: #569cd6; }
-        
-        .paper-wrapper.markdown-mode h2 { font-size: 1rem; color: #569cd6; font-weight: normal; border-bottom: none; padding-bottom: 0; margin-top: 1rem; }
-        .paper-wrapper.markdown-mode h2::before { content: '## '; color: #569cd6; }
-
-        .paper-wrapper.markdown-mode p { margin-bottom: 1rem; }
-        .paper-wrapper.markdown-mode strong { color: #ce9178; font-weight: normal; }
-        .paper-wrapper.markdown-mode strong::before, .paper-wrapper.markdown-mode strong::after { content: '**'; color: #ce9178; opacity: 0.7; }
-        
-        .paper-wrapper.markdown-mode blockquote { border-left: none; padding-left: 0; color: #6a9955; font-style: normal; }
-        .paper-wrapper.markdown-mode blockquote::before { content: '> '; color: #6a9955; }
-
-        .paper-wrapper.markdown-mode ol { list-style: none; padding-left: 0; }
-        
-        /* Highlighting Logic */
-        .segment {
-            transition: all 0.3s;
-            border-radius: 4px;
-            padding: 2px 0;
-            opacity: 0.4;
-            filter: blur(0.5px);
+        nav a {
+            font-family: var(--font-accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        .segment.active {
-            opacity: 1;
-            filter: blur(0);
-            background-color: rgba(255, 243, 163, 0.4);
-            box-shadow: 0 0 0 4px rgba(255, 243, 163, 0.4);
+        nav a:hover {
+            color: var(--accent-rust);
         }
 
-        .paper-wrapper.markdown-mode .segment.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
-        }
-
-        .segment.idle {
-            opacity: 1;
-            filter: blur(0);
-        }
-
-        /* Annotations Panel */
-        .annotations-panel {
-            flex: 0.8;
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 0 20px;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(184, 149, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(166, 93, 63, 0.08) 0%, transparent 50%),
+                var(--paper-cream);
         }
 
-        .note-card {
-            background: #fff9b1;
-            padding: 25px;
-            box-shadow: 4px 4px 15px rgba(0,0,0,0.1);
-            transform: rotate(-1deg);
-            font-family: 'Kalam', cursive;
-            font-size: 1.3rem;
-            color: #2d2d2d;
-            border-top: 1px solid rgba(255,255,255,0.5);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0;
-            transform: translateX(50px) rotate(5deg);
+        .hero::before {
+            content: '';
             position: absolute;
-            width: 90%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 100px,
+                    rgba(44, 36, 22, 0.02) 100px,
+                    rgba(44, 36, 22, 0.02) 101px
+                );
             pointer-events: none;
         }
 
-        .note-card.visible {
-            opacity: 1;
-            transform: translateX(0) rotate(-1deg);
-            pointer-events: auto;
+        .book-badge {
+            font-family: var(--font-accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent-rust);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideUp 1s ease 0.3s forwards;
         }
 
-        .note-card strong {
-            color: var(--ink-red);
-            font-family: 'Caveat', cursive;
-            font-size: 1.6rem;
-            display: block;
-            margin-bottom: 10px;
+        .chapter-number {
+            font-family: var(--font-display);
+            font-size: clamp(6rem, 15vw, 12rem);
+            font-weight: 800;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--accent-gold);
+            line-height: 1;
+            margin-bottom: -1rem;
+            opacity: 0;
+            animation: slideUp 1s ease 0.5s forwards;
         }
 
-        .note-card p {
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            hyphens: none;
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            color: var(--ink-black);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideUp 1s ease 0.7s forwards;
         }
 
-        .note-card p strong {
-            display: inline;
-            white-space: nowrap;
+        .hero h1 span {
+            font-style: italic;
+            color: var(--accent-rust);
         }
 
-        /* Toggle Switch */
-        .toggle-switch {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            gap: 10px;
+        .hero-subtitle {
+            font-family: var(--font-accent);
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--ink-light);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: slideUp 1s ease 0.9s forwards;
         }
-        
-        .toggle-switch input { display: none; }
-        
-        .toggle-slider {
-            width: 40px;
-            height: 20px;
-            background-color: #ccc;
-            border-radius: 20px;
-            position: relative;
-            transition: .4s;
-        }
-        
-        .toggle-slider:before {
-            content: "";
+
+        .scroll-indicator {
             position: absolute;
-            height: 16px;
-            width: 16px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            border-radius: 50%;
-            transition: .4s;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.5s forwards, bounce 2s ease-in-out 2.5s infinite;
         }
-        
-        input:checked + .toggle-slider { background-color: var(--nestle-red); }
-        input:checked + .toggle-slider:before { transform: translateX(20px); }
 
-        /* Cover Slide */
-        .slide-cover {
+        .scroll-indicator span {
+            font-family: var(--font-accent);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--ink-light) 0%, transparent 100%);
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--paper-dark), transparent);
+            margin: 2rem 0;
+        }
+
+        /* Intro Story Section */
+        .intro-story {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 8rem 4rem;
+            background: 
+                linear-gradient(135deg, var(--paper-aged) 0%, var(--paper-cream) 100%);
+            position: relative;
+        }
+
+        .intro-story::before {
+            content: '"';
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            font-family: var(--font-display);
+            font-size: 15rem;
+            color: var(--accent-gold);
+            opacity: 0.15;
+            line-height: 1;
+        }
+
+        .story-content h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--ink-black);
+            margin-bottom: 1.5rem;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            color: var(--ink-brown);
+        }
+
+        .story-content .highlight {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--accent-rust);
+            border-left: 3px solid var(--accent-gold);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .story-image {
+            position: relative;
+        }
+
+        .debate-visual {
+            background: var(--paper-dark);
+            padding: 2rem;
+            border-radius: 4px;
+            box-shadow: 
+                20px 20px 60px var(--shadow-medium),
+                -5px -5px 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .debate-visual img {
+            width: 100%;
+            filter: sepia(30%) contrast(1.1);
+            border-radius: 2px;
+        }
+
+        .debate-caption {
+            font-family: var(--font-accent);
+            font-size: 0.85rem;
+            color: var(--ink-light);
+            text-align: center;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* Signals Analysis */
+        .signals-analysis {
+            background: var(--paper-cream);
+        }
+
+        .signals-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .signals-header h2 {
+            font-family: var(--font-display);
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .signals-header p {
+            font-family: var(--font-accent);
+            font-size: 1.2rem;
+            color: var(--ink-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .signals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .signal-card {
+            background: linear-gradient(145deg, var(--paper-cream), var(--paper-aged));
+            border: 1px solid var(--paper-dark);
+            padding: 2.5rem;
+            position: relative;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .signal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px var(--shadow-medium);
+        }
+
+        .signal-card::before {
+            content: attr(data-number);
+            position: absolute;
+            top: -15px;
+            right: 2rem;
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            opacity: 0.3;
+        }
+
+        .signal-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-rust);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--paper-dark);
+        }
+
+        .signal-card .kennedy, .signal-card .nixon {
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .signal-card .kennedy {
+            background: rgba(107, 142, 35, 0.1);
+            border-left: 3px solid #6b8e23;
+        }
+
+        .signal-card .nixon {
+            background: rgba(166, 93, 63, 0.1);
+            border-left: 3px solid var(--accent-rust);
+        }
+
+        .signal-card .label {
+            font-family: var(--font-accent);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .signal-card .kennedy .label { color: #4a6316; }
+        .signal-card .nixon .label { color: var(--accent-rust); }
+
+        /* Power Signals Section */
+        .power-signals {
+            background: 
+                linear-gradient(180deg, var(--paper-cream) 0%, var(--paper-aged) 50%, var(--paper-cream) 100%);
+        }
+
+        .power-signal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 5rem 0;
+            border-bottom: 1px solid var(--paper-dark);
+        }
+
+        .power-signal:nth-child(even) {
+            direction: rtl;
+        }
+
+        .power-signal:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .power-signal-number {
+            font-family: var(--font-display);
+            font-size: 8rem;
+            font-weight: 800;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--accent-gold);
+            line-height: 1;
+            margin-bottom: -2rem;
+        }
+
+        .power-signal h3 {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--ink-black);
+            margin-bottom: 1.5rem;
+        }
+
+        .power-signal h3 span {
+            font-style: italic;
+            color: var(--accent-rust);
+        }
+
+        .power-signal p {
+            color: var(--ink-brown);
+            margin-bottom: 1rem;
+        }
+
+        .principle-box {
+            background: var(--paper-dark);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent-rust);
+        }
+
+        .principle-box strong {
+            font-family: var(--font-accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-rust);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .principle-box p {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--ink-black);
+            margin: 0;
+        }
+
+        .power-visual {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+        }
+
+        .posture-demo {
+            width: 280px;
+            height: 400px;
+            background: var(--paper-dark);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .posture-figure {
+            font-size: 12rem;
+            opacity: 0.6;
+        }
+
+        .posture-arrows {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .arrow {
+            position: absolute;
+            color: var(--accent-rust);
+            font-size: 2rem;
+        }
+
+        .arrow-up { top: 10%; left: 50%; transform: translateX(-50%); }
+        .arrow-left { left: 10%; top: 50%; transform: translateY(-50%); }
+        .arrow-right { right: 10%; top: 50%; transform: translateY(-50%); }
+        .arrow-down { bottom: 15%; left: 50%; transform: translateX(-50%); }
+
+        /* Tips Section */
+        .tips-section {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 5rem 4rem;
+            margin: 4rem 0;
+        }
+
+        .tips-section h3 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .tips-section h3::before {
+            content: '★';
+            font-size: 1.5rem;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .when-box {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(184, 149, 110, 0.3);
+        }
+
+        .when-box h4 {
+            font-family: var(--font-accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .when-box ul {
+            list-style: none;
+        }
+
+        .when-box li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.95rem;
+            color: var(--paper-aged);
+        }
+
+        .when-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+        }
+
+        .when-not li::before {
+            content: '×';
+            color: var(--accent-rust);
+        }
+
+        /* Hand Gestures Visual */
+        .gestures-showcase {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+
+        .gesture-item {
+            text-align: center;
+            width: 150px;
+        }
+
+        .gesture-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--paper-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gesture-item:hover .gesture-icon {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px var(--shadow-medium);
+        }
+
+        .gesture-name {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--ink-black);
+            margin-bottom: 0.3rem;
+        }
+
+        .gesture-desc {
+            font-size: 0.85rem;
+            color: var(--ink-light);
+        }
+
+        /* Statistics Highlight */
+        .stat-highlight {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            padding: 4rem 2rem;
+            background: 
+                linear-gradient(135deg, var(--paper-aged), var(--paper-cream));
+            margin: 3rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--accent-rust);
+            line-height: 1;
+        }
+
+        .stat-unit {
+            font-size: 2rem;
+        }
+
+        .stat-desc {
+            font-family: var(--font-accent);
+            font-size: 1rem;
+            color: var(--ink-light);
+            max-width: 200px;
+        }
+
+        /* Charisma Scale Section */
+        .charisma-scale-section {
+            padding: 6rem 4rem;
+            background: 
+                radial-gradient(ellipse at 50% 20%, rgba(184, 149, 110, 0.08) 0%, transparent 60%),
+                var(--paper-cream);
+        }
+
+        .charisma-cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .charisma-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 20px var(--shadow-soft);
+            transition: all 0.4s ease;
+            border-top: 5px solid;
+        }
+
+        .charisma-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px var(--shadow-medium);
+        }
+
+        .warmth-card {
+            border-top-color: #6b8e23;
+        }
+
+        .presence-card {
+            border-top-color: var(--accent-gold);
+        }
+
+        .competence-card {
+            border-top-color: var(--accent-rust);
+        }
+
+        .charisma-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .warmth-card::before {
+            background: radial-gradient(circle at top, rgba(107, 142, 35, 0.08) 0%, transparent 70%);
+        }
+
+        .presence-card::before {
+            background: radial-gradient(circle at top, rgba(184, 149, 110, 0.1) 0%, transparent 70%);
+        }
+
+        .competence-card::before {
+            background: radial-gradient(circle at top, rgba(166, 93, 63, 0.08) 0%, transparent 70%);
+        }
+
+        .charisma-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon-wrapper {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            font-size: 3rem;
+            background: var(--paper-aged);
+            box-shadow: 0 4px 15px var(--shadow-soft);
+            transition: all 0.4s ease;
+        }
+
+        .charisma-card:hover .card-icon {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 8px 25px var(--shadow-medium);
+        }
+
+        .warmth-card .card-icon {
+            background: linear-gradient(135deg, rgba(107, 142, 35, 0.15), rgba(107, 142, 35, 0.05));
+        }
+
+        .presence-card .card-icon {
+            background: linear-gradient(135deg, rgba(184, 149, 110, 0.2), rgba(184, 149, 110, 0.08));
+        }
+
+        .competence-card .card-icon {
+            background: linear-gradient(135deg, rgba(166, 93, 63, 0.15), rgba(166, 93, 63, 0.05));
+        }
+
+        .charisma-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .warmth-card h3 {
+            color: #4a6316;
+        }
+
+        .presence-card h3 {
+            color: var(--accent-gold);
+        }
+
+        .competence-card h3 {
+            color: var(--accent-rust);
+        }
+
+        .card-divider {
+            width: 60px;
+            height: 3px;
+            margin: 0 auto 2rem;
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        .warmth-card .card-divider {
+            background: linear-gradient(to right, #6b8e23, rgba(107, 142, 35, 0.3));
+        }
+
+        .presence-card .card-divider {
+            background: linear-gradient(to right, var(--accent-gold), rgba(184, 149, 110, 0.3));
+        }
+
+        .competence-card .card-divider {
+            background: linear-gradient(to right, var(--accent-rust), rgba(166, 93, 63, 0.3));
+        }
+
+        .charisma-card:hover .card-divider {
+            width: 100px;
+        }
+
+        .charisma-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .charisma-list li {
+            padding: 0.7rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--ink-brown);
+            font-size: 1rem;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .charisma-list li:hover {
+            padding-left: 2.5rem;
+            color: var(--ink-black);
+        }
+
+        .list-icon {
+            position: absolute;
+            left: 0;
+            top: 0.7rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .warmth-card .list-icon {
+            color: #6b8e23;
+        }
+
+        .presence-card .list-icon {
+            color: var(--accent-gold);
+        }
+
+        .competence-card .list-icon {
+            color: var(--accent-rust);
+        }
+
+        .charisma-list li:hover .list-icon {
+            transform: scale(1.3);
+        }
+
+        .charisma-list.two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 1rem;
+        }
+
+        /* Interruption Techniques */
+        .interruption-section {
+            padding: 5rem 4rem;
+            background: 
+                linear-gradient(to bottom, var(--paper-cream), var(--paper-aged));
+        }
+
+        .interruption-section h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .techniques-timeline {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            position: relative;
+        }
+
+        .techniques-timeline::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: linear-gradient(to right, var(--paper-dark), var(--accent-gold), var(--accent-rust));
+        }
+
+        .technique-card {
+            flex: 1;
+            max-width: 300px;
             text-align: center;
             position: relative;
         }
 
-        .slide-cover h1 { font-family: 'Caveat', cursive; font-size: 4.5rem; font-weight: 700; color: var(--ink-black); line-height: 1.1; margin-bottom: 20px; }
-        .slide-cover .subtitle { font-family: 'Patrick Hand', cursive; font-size: 1.8rem; color: var(--ink-red); margin-bottom: 40px; }
-        
-        .instructor-box { display: flex; align-items: center; gap: 20px; margin-top: 30px; padding: 20px 40px; background: white; border-radius: 10px; box-shadow: 3px 3px 15px rgba(0,0,0,0.1); position: relative; }
-        .instructor-box img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--nestle-red); }
-        .instructor-box .name { font-family: 'Caveat', cursive; font-size: 1.8rem; }
-        .instructor-box .role { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: #666; }
-        .instructor-box .tape { position: absolute; width: 80px; height: 25px; background: rgba(255,255,255,0.6); top: -12px; left: 50%; transform: translateX(-50%) rotate(-3deg); }
+        .technique-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--paper-cream);
+            border: 3px solid var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
 
-        .nestle-logo { position: absolute; bottom: 30px; right: 70px; }
-        .nestle-logo img { height: 50px; object-fit: contain; }
-        
-        /* UI Elements */
-        .nav-hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 10px 25px; border-radius: 30px; font-family: 'Inter', sans-serif; font-size: 0.85rem; display: flex; align-items: center; gap: 20px; z-index: 100; }
-        .nav-hint kbd { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 4px; }
-        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: var(--nestle-red); transition: width 0.3s ease; z-index: 100; }
-        .slide-counter { position: fixed; top: 20px; right: 30px; font-family: 'Caveat', cursive; font-size: 1.5rem; color: white; background: var(--ink-black); padding: 8px 20px; border-radius: 20px; z-index: 100; }
-        
-        /* Section Cards */
-        .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        
-        .section-card { 
-            background: white; 
-            border-radius: 10px; 
-            padding: 25px; 
-            margin-bottom: 20px; 
-            box-shadow: 2px 2px 15px rgba(0,0,0,0.08); 
+        .technique-card:hover .technique-icon {
+            background: var(--accent-gold);
+            transform: scale(1.1);
+        }
+
+        .technique-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--ink-black);
+            margin-bottom: 0.5rem;
+        }
+
+        .technique-card p {
+            font-size: 0.95rem;
+            color: var(--ink-light);
+            padding: 0 1rem;
+        }
+
+        .intensity-label {
+            font-family: var(--font-accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-rust);
+            margin-top: 1rem;
+        }
+
+        /* Case Study */
+        .case-study {
+            background: var(--ink-brown);
+            color: var(--paper-cream);
+            padding: 5rem 4rem;
+            margin: 4rem auto;
+        }
+
+        .case-study > div {
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .case-study h2 {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .case-study > div > p {
+            text-align: center;
+        }
+
+        .case-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .case-before, .case-after {
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .case-before h3, .case-after h3 {
+            font-family: var(--font-accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .case-before h3 { color: var(--accent-rust); }
+        .case-after h3 { color: #6b8e23; }
+
+        .case-before ul, .case-after ul {
+            list-style: none;
+        }
+
+        .case-before li, .case-after li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--paper-aged);
+        }
+
+        .case-before li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: var(--accent-rust);
+        }
+
+        .case-after li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #6b8e23;
+        }
+
+        .case-quote {
+            text-align: center;
+            margin: 3rem auto 0;
+            padding: 2rem;
+            background: rgba(107, 142, 35, 0.2);
+            border-radius: 4px;
+            max-width: 720px;
+        }
+
+        /* Challenge Section */
+        .challenge-section {
+            padding: 5rem 4rem;
+            background: 
+                radial-gradient(ellipse at center, var(--paper-aged) 0%, var(--paper-cream) 100%);
+        }
+
+        .challenge-section h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .challenge-section > p {
+            text-align: center;
+            color: var(--ink-light);
+            margin-bottom: 3rem;
+        }
+
+        .signals-table {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 100%;
+            background: var(--paper-cream);
+            box-shadow: 0 10px 40px var(--shadow-medium);
+        }
+
+        .signals-table th {
+            font-family: var(--font-accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 1.2rem 1rem;
+            text-align: left;
+        }
+
+        .signals-table td {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid var(--paper-dark);
+            vertical-align: top;
+        }
+
+        .signals-table tr:hover {
+            background: var(--paper-aged);
+        }
+
+        .signals-table td:first-child {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--accent-rust);
+        }
+
+        /* Final Section */
+        .final-section {
+            text-align: center;
+            padding: 8rem 4rem;
+            background: 
+                linear-gradient(180deg, var(--paper-cream) 0%, var(--paper-aged) 100%);
+        }
+
+        .final-quote {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-style: italic;
+            color: var(--ink-black);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.4;
+        }
+
+        .final-quote span {
+            color: var(--accent-rust);
+        }
+
+        .final-author {
+            font-family: var(--font-accent);
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+        }
+
+        .book-info {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--paper-dark);
+        }
+
+        .book-info p {
+            font-family: var(--font-accent);
+            font-size: 0.9rem;
+            color: var(--ink-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .book-title-final {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--ink-black);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .mascot-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Fun Tips */
+        .fun-tip {
+            background: linear-gradient(135deg, var(--paper-aged), var(--paper-dark));
+            border: none;
+            padding: 2rem;
+            margin: 2rem 0;
             position: relative;
         }
-        .section-card::before {
-            content: attr(data-section);
+
+        .fun-tip::before {
+            content: '★';
             position: absolute;
-            top: -12px;
-            left: 20px;
-            background: var(--ink-red);
-            color: white;
-            padding: 4px 15px;
-            border-radius: 20px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 600;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--accent-gold);
+            background: var(--paper-cream);
+            padding: 0 1rem;
         }
-        .section-card.green::before { background: #27ae60; }
-        .section-card.blue::before { background: #2980b9; }
-        .section-card.purple::before { background: #8e44ad; }
-        
-        .section-card h3 { font-family: 'Caveat', cursive; font-size: 1.6rem; color: var(--ink-black); margin-bottom: 10px; }
-        .section-card p { font-family: 'Kalam', cursive; font-size: 1.1rem; color: #555; line-height: 1.6; }
-        
-        /* Checklist */
-        .checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 25px; }
-        .checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 15px; background: white; border-radius: 8px; box-shadow: 2px 2px 8px rgba(0,0,0,0.06); font-family: 'Kalam', cursive; font-size: 1.05rem; cursor: pointer; transition: all 0.3s ease; }
-        .checklist-item:hover { transform: translateX(5px); background: #f8f8f8; }
-        .checklist-item .checkbox { width: 22px; height: 22px; border: 2px solid var(--ink-red); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .checklist-item.checked .checkbox { background: var(--ink-red); color: white; }
-        .checklist-item.checked .checkbox::after { content: '✓'; }
 
-        /* Hierarchy Flow (Slide 3) */
-        .hierarchy-flow { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 20px; }
-        .hierarchy-box { display: flex; align-items: center; gap: 15px; padding: 15px 30px; background: white; border-radius: 8px; box-shadow: 2px 2px 12px rgba(0,0,0,0.08); font-family: 'Kalam', cursive; font-size: 1.15rem; min-width: 350px; transition: all 0.3s ease; }
-        .hierarchy-box:hover { transform: scale(1.03); box-shadow: 4px 4px 20px rgba(0,0,0,0.12); }
-        .hierarchy-box .num { width: 32px; height: 32px; background: var(--ink-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600; flex-shrink: 0; }
-        .hierarchy-arrow { color: var(--ink-red); font-size: 1.2rem; }
+        .fun-tip h4 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--accent-rust);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
 
-        /* Practice Slide */
-        .practice-slide { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .practice-icon { font-size: 5rem; margin-bottom: 30px; animation: bounce 2s infinite; }
-        .practice-title { font-family: 'Caveat', cursive; font-size: 3.5rem; color: var(--ink-black); margin-bottom: 15px; }
-        .practice-subtitle { font-family: 'Kalam', cursive; font-size: 1.4rem; color: #666; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .fun-tip p {
+            text-align: center;
+            color: var(--ink-brown);
+            font-size: 0.95rem;
+        }
 
         /* Responsive */
-        @media (max-width: 1200px) {
-            .slide { padding: 35px 45px; }
-            .slide-cover h1 { font-size: 3rem; }
-            .slide-title { font-size: 2.3rem; }
-            .two-columns, .checklist { grid-template-columns: 1fr; }
+        @media (max-width: 1024px) {
+            .intro-story,
+            .power-signal,
+            .case-comparison,
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .power-signal:nth-child(even) {
+                direction: ltr;
+            }
+
+            .techniques-timeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .techniques-timeline::before {
+                display: none;
+            }
+
+            .charisma-cards-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .charisma-list.two-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .charisma-scale-section {
+                padding: 4rem 2rem;
+            }
         }
 
-        /* Scrollbar styling */
-        .slide::-webkit-scrollbar { width: 8px; }
-        .slide::-webkit-scrollbar-track { background: transparent; }
-        .slide::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-        .slide::-webkit-scrollbar-thumb:hover { background: #aaa; }
+        @media (max-width: 768px) {
+            section {
+                padding: 4rem 1.5rem;
+            }
 
+            nav {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .stat-highlight {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .signals-table {
+                font-size: 0.9rem;
+            }
+
+            .signals-table th,
+            .signals-table td {
+                padding: 0.8rem 0.5rem;
+            }
+
+            .charisma-card {
+                padding: 2rem;
+            }
+
+            .card-icon {
+                width: 75px;
+                height: 75px;
+                font-size: 2.5rem;
+            }
+
+            .charisma-card h3 {
+                font-size: 1.3rem;
+            }
+
+            .charisma-list li {
+                font-size: 0.95rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="progress-bar" id="progressBar"></div>
-    <div class="slide-counter" id="slideCounter">1 / 7</div>
+    <nav>
+        <a href="#cap1">Fundamentos</a>
+        <a href="#cap4">Não Verbal</a>
+        <a href="#cap7">Voz</a>
+        <a href="#cap9">Palavras</a>
+        <a href="#cap10">Visual</a>
+    </nav>
 
-    <div class="slide-container">
-        <!-- Slide 1: Cover -->
-        <div class="slide slide-cover active" data-slide="1">
-            <div class="deco-stars" style="position: absolute; top: 80px; left: 100px;">
-                <span class="star-spin">✦</span> <span class="star-float" style="animation-delay: 0.3s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; top: 120px; right: 150px;">
-                <span class="star-spin" style="animation-delay: 0.5s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; top: 200px; left: 250px; font-size: 1.2rem;">
-                <span class="star-float" style="animation-delay: 0.8s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; top: 350px; right: 100px; font-size: 1.8rem;">
-                <span class="star-spin" style="animation-delay: 0.2s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; bottom: 250px; right: 200px; font-size: 1.3rem;">
-                <span class="star-float" style="animation-delay: 1s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; bottom: 200px; left: 150px; font-size: 1.6rem;">
-                <span class="star-spin" style="animation-delay: 0.7s;">✦</span>
-            </div>
-            <div style="position: absolute; bottom: 40px; left: 100px;">
-                <div class="robot-container">
-                    <img src="robot.png" alt="Robot mascot" class="robot-photo">
-                    <div class="speech-bubble">Welcome!</div>
-                </div>
-            </div>
-            
-            <h1 class="slide-up">Como criar um<br>Prompt Profissional</h1>
-            <p class="subtitle slide-up" style="animation-delay: 0.2s">Anatomia do Prompt Enhancer</p>
-            
-            <div class="instructor-box slide-up" style="animation-delay: 0.4s">
-                <div class="tape"></div>
-                <img src="https://nestle.sharepoint.com/sites/ournest-hq/_layouts/15/userphoto.aspx?size=L&username=lucas.nascimento1@br.nestle.com" alt="Lucas Nascimento" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23c8102e%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22>LN</text></svg>'">
-                <div>
-                    <div class="name">Lucas Nascimento</div>
-                    <div class="role">Data Operations Team</div>
-                </div>
-            </div>
-            
-            <div class="nestle-logo"><img src="https://logo-teka.com/wp-content/uploads/2025/06/nestle-logo.png" alt="Nestlé"></div>
-            
-            <div class="annotation" style="bottom: 100px; right: 200px; transform: rotate(5deg);">
-                → Navegue com as setas!
-            </div>
-        </div>
-
-        <!-- Slide 2: Intro -->
-        <div class="slide slide-content" data-slide="2">
-            <h2 class="slide-title">
-                <span class="underline-sketch">O que vamos aprender?</span>
-            </h2>
-            
-            <div class="slide-body">
-                <p style="margin-bottom: 25px; font-size: 1.4rem;">
-                    Vamos <span class="highlight">destrinchar cada parte</span> de um prompt profissional
-                    e entender por que cada elemento existe.
-                </p>
-                
-                <div class="two-columns" style="margin-top: 30px;">
-                    <div class="section-card" data-section="Seção 1">
-                        <h3>🎭 Identidade & Missão</h3>
-                        <p>Como definir quem o agente é e o que ele faz</p>
-                    </div>
-                    
-                    <div class="section-card green" data-section="Seção 2">
-                        <h3>📋 Os 6 Princípios</h3>
-                        <p>Regras que o agente aplica silenciosamente</p>
-                    </div>
-                    
-                    <div class="section-card blue" data-section="Seção 3">
-                        <h3>🚫 Regras de Controle</h3>
-                        <p>O que o agente NUNCA deve fazer</p>
-                    </div>
-                    
-                    <div class="section-card purple" data-section="Seção 4">
-                        <h3>📝 Exemplo & Ativação</h3>
-                        <p>Demonstração prática e comando final</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="sticky-note" style="position: absolute; bottom: 60px; right: 80px; max-width: 220px;">
-                Cada parte tem uma função específica!
-            </div>
-        </div>
-
-        <!-- Slide 3: Overview -->
-        <div class="slide slide-content" data-slide="3">
-            <h2 class="slide-title">Visão Geral do Prompt</h2>
-            
-            <div class="hierarchy-flow">
-                <div class="hierarchy-box"><span class="num">1</span><span><strong>IDENTIDADE</strong> — "Você é um assistente..."</span></div>
-                <div class="hierarchy-arrow">↓</div>
-                <div class="hierarchy-box"><span class="num">2</span><span><strong>MISSÃO</strong> — "Transformar prompts..."</span></div>
-                <div class="hierarchy-arrow">↓</div>
-                <div class="hierarchy-box"><span class="num">3</span><span><strong>METODOLOGIA</strong> — 6 princípios</span></div>
-                <div class="hierarchy-arrow">↓</div>
-                <div class="hierarchy-box"><span class="num">4</span><span><strong>RESTRIÇÕES</strong> — Regras NUNCA</span></div>
-                <div class="hierarchy-arrow">↓</div>
-                <div class="hierarchy-box"><span class="num">5</span><span><strong>EXEMPLO</strong> — Antes/Depois</span></div>
-                <div class="hierarchy-arrow">↓</div>
-                <div class="hierarchy-box"><span class="num">6</span><span><strong>ATIVAÇÃO</strong> — "Aguarde o prompt..."</span></div>
-            </div>
-            
-            <div class="annotation" style="top: 130px; right: 100px; transform: rotate(5deg); font-size: 1.6rem;">
-                Esta estrutura funciona! ★
-            </div>
-        </div>
-
-        <!-- Slide 4: The Dissection Master -->
-        <div class="slide" data-slide="4">
-            <div class="dissection-layout">
-                <!-- The Paper -->
-                <div class="paper-wrapper" id="paperWrapper">
-                    <div class="paper-header">
-                        <span>📄 Refer.txt</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="mdToggle">
-                            <div class="toggle-slider"></div>
-                            <span>Markdown</span>
-                        </label>
-                    </div>
-                    
-                    <div class="paper-content" id="promptPaper">
-                        <!-- Content Segments -->
-                        
-                        <div class="segment idle" data-segment="1">
-                            <h1>Prompt Enhancer - Instruções para Copilot</h1>
-                            <p><strong>Você é um assistente especializado em otimização de prompts de IA. Sua função é transformar prompts básicos em prompts profissionais e eficazes.</strong></p>
-                        </div>
-
-                        <div class="segment idle" data-segment="2">
-                            <p>Quando o usuário fornecer um prompt básico, você deve reescrevê-lo aplicando silenciosamente os seguintes princípios:</p>
-                            <ol>
-                                <li>Comece com um <strong>verbo de ação claro</strong> especificando o resultado desejado</li>
-                                <li>Forneça <strong>contexto relevante</strong> incluindo background, critérios de sucesso e ambiente</li>
-                                <li>Inclua <strong>exemplos ou frameworks</strong> quando apropriado para melhorar a qualidade</li>
-                                <li>Defina uma <strong>persona específica</strong> com expertise relevante para a tarefa</li>
-                                <li>Especifique o <strong>formato de saída</strong> desejado (tabela, lista, parágrafos, email, etc)</li>
-                                <li>Indique o <strong>tom apropriado</strong> (formal, casual, profissional, criativo, etc)</li>
-                            </ol>
-                        </div>
-
-                        <div class="segment idle" data-segment="3">
-                            <h2>REGRAS CRÍTICAS - SIGA RIGOROSAMENTE</h2>
-                            <ul>
-                                <li>Você <strong>NUNCA</strong> deve mencionar os princípios acima no seu output</li>
-                                <li>Você <strong>NUNCA</strong> deve usar marcadores como (TAREFA), (CONTEXTO), (PERSONA), etc</li>
-                                <li>Você <strong>NUNCA</strong> deve usar aspas ao redor do prompt melhorado</li>
-                                <li>Você <strong>NUNCA</strong> deve adicionar frases introdutórias como "Aqui está o prompt melhorado:"</li>
-                                <li>Você <strong>NUNCA</strong> deve adicionar perguntas ao usuário no final</li>
-                                <li>Você <strong>NUNCA</strong> deve sugerir alternativas ou opções adicionais</li>
-                                <li>Você <strong>NUNCA</strong> deve formatar o prompt com bullet points ou listas numeradas</li>
-                                <li>O prompt otimizado deve ser escrito como um <strong>ÚNICO TEXTO CORRIDO</strong>, em parágrafos contínuos</li>
-                            </ul>
-                        </div>
-
-                        <div class="segment idle" data-segment="4">
-                            <h2>Exemplo de Transformação</h2>
-                            <p><strong>Input básico:</strong></p>
-                            <blockquote>Me ajude a escolher uma ação de tecnologia</blockquote>
-                            <p><strong>Output otimizado:</strong></p>
-                            <blockquote>Você é um analista de investimentos experiente com talento para prever tendências de mercado. Elabore um relatório detalhado de investimento explicando os motivos para selecionar uma ação de tecnologia específica. Destaque os fatores que tornam essa ação uma oportunidade promissora de investimento...</blockquote>
-                            <p><em>(FIM - texto corrido, sem bullets ou listas)</em></p>
-                        </div>
-
-                        <div class="segment idle" data-segment="5">
-                            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ccc;">
-                            <p><strong>IMPORTANTE:</strong> O prompt otimizado deve ser escrito como um texto fluido e contínuo. Após escrever o prompt otimizado, você deve parar completamente. <strong>Aguarde o prompt básico do usuário e transforme-o seguindo essas diretrizes.</strong></p>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Annotations -->
-                <div class="annotations-panel" style="position: relative;">
-                    <!-- Placeholder for no selection -->
-                    <div class="note-card visible" id="note-0" style="background: #e2d9f3; transform: rotate(2deg);">
-                        <strong>Visão Global</strong>
-                        Este é o prompt completo que controla o comportamento do agente. Vamos analisar cada parte?
-                    </div>
-
-                    <div class="note-card" id="note-1" style="background: #fff3a3;">
-                        <strong>1. Identidade & Missão</strong>
-                        <p>Definir quem a IA é ("assistente especializado") ativa os nós de conhecimento corretos no modelo.</p>
-                        <p style="margin-top:10px; font-size: 0.9em; color: #555;">💡 O verbo "transformar" deixa claro que haverá um input e um output.</p>
-                    </div>
-
-                    <div class="note-card" id="note-2" style="background: #d4edda; transform: rotate(2deg);">
-                        <strong>2. Metodologia</strong>
-                        <p>Aqui estão os 6 princípios que o agente aplicará.</p>
-                        <p>Note a palavra <strong>"silenciosamente"</strong>, isso impede que o agente fique explicando o que fez ("Apliquei o princípio 1..."). Queremos apenas o resultado!</p>
-                        <p style="margin-top:10px; font-size: 0.9em; color: #155724; font-weight: bold;">Estes princípios são aplicados em CADA prompt que o agente otimiza!</p>
-                    </div>
-
-                    <div class="note-card" id="note-3" style="background: #f8d7da; transform: rotate(-1deg);">
-                        <strong>3. Regras de Controle</strong>
-                        <p>O que a IA <strong>NÃO</strong> deve fazer é tão importante quanto o que deve.</p>
-                        <p>Usamos CAIXA ALTA e "NUNCA" repetidamente para vencer a tendência do modelo de ser "tagarela" (chatty).</p>
-                        <p style="margin-top:10px; font-size: 0.9em; color: #c0392b; font-weight: bold;">★ CAIXA ALTA = prioridade máxima!</p>
-                    </div>
-
-                    <div class="note-card" id="note-4" style="background: #d1ecf1; transform: rotate(1deg);">
-                        <strong>4. Exemplo "Few-Shot"</strong>
-                        <p>A melhor forma de ensinar uma IA é mostrar.</p>
-                        <p>O exemplo demonstra exatamente o formato de texto corrido, sem formatação, que exigimos nas regras.</p>
-                        <p style="margin-top:10px; font-size: 0.9em; color: #0c5460;">💡 Controlar comportamentos indesejados é tão importante quanto definir os desejados!</p>
-                    </div>
-
-                    <div class="note-card" id="note-5" style="background: #e2e6ea; transform: rotate(-2deg);">
-                        <strong>5. Ativação Final</strong>
-                        <p>Modelos têm "viés de recência" (lembram mais do fim).</p>
-                        <p>Repetimos o comando crítico de "parar completamente" e colocamos o agente em modo de espera ("Aguarde...").</p>
-                        <p style="margin-top:10px; font-size: 0.9em; color: #555;">Em prompts longos, a aderência às instruções pode degradar. Por isso repetimos!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 5: Practice -->
-        <div class="slide practice-slide" data-slide="5">
-            <div class="practice-icon">🚀</div>
-            <h2 class="practice-title">Hora da Prática!</h2>
-            <p class="practice-subtitle">Vamos inserir no Copilot Studio</p>
-            
-            <div class="annotation" style="bottom: 180px; right: 250px; transform: rotate(-3deg); font-size: 1.5rem;">
-                → Alt+Tab time!
-            </div>
-        </div>
-
-        <!-- Slide 6: Checklist -->
-        <div class="slide slide-content" data-slide="6">
-            <h2 class="slide-title">Checklist: Criando seu Prompt <span class="deco-stars">✦</span></h2>
-            
-            <div class="checklist">
-                <div class="checklist-item" onclick="this.classList.toggle('checked')">
-                    <div class="checkbox"></div>
-                    <span><strong>1. IDENTIDADE:</strong> Defini persona específica?</span>
-                </div>
-                <div class="checklist-item" onclick="this.classList.toggle('checked')">
-                    <div class="checkbox"></div>
-                    <span><strong>2. MISSÃO:</strong> Especifiquei a função claramente?</span>
-                </div>
-                <div class="checklist-item" onclick="this.classList.toggle('checked')">
-                    <div class="checkbox"></div>
-                    <span><strong>3. METODOLOGIA:</strong> Listei os princípios?</span>
-                </div>
-                <div class="checklist-item" onclick="this.classList.toggle('checked')">
-                    <div class="checkbox"></div>
-                    <span><strong>4. RESTRIÇÕES:</strong> Adicionei regras NUNCA?</span>
-                </div>
-                <div class="checklist-item" onclick="this.classList.toggle('checked')">
-                    <div class="checkbox"></div>
-                    <span><strong>5. EXEMPLO:</strong> Incluí Antes/Depois?</span>
-                </div>
-                <div class="checklist-item" onclick="this.classList.toggle('checked')">
-                    <div class="checkbox"></div>
-                    <span><strong>6. ATIVAÇÃO:</strong> Comando de ativação no final?</span>
-                </div>
-                <div class="checklist-item" onclick="this.classList.toggle('checked')">
-                    <div class="checkbox"></div>
-                    <span><strong>TÉCNICA:</strong> Usei CAIXA ALTA para ênfase?</span>
-                </div>
-                <div class="checklist-item" onclick="this.classList.toggle('checked')">
-                    <div class="checkbox"></div>
-                    <span><strong>TÉCNICA:</strong> Reforço de regras no final?</span>
-                </div>
-            </div>
-            
-            <div class="annotation" style="bottom: 80px; right: 100px; font-size: 1.6rem;">
-                clique para marcar ✓
-            </div>
-            
-            <div class="nestle-logo" style="bottom: 30px;">
-                <img src="https://logo-teka.com/wp-content/uploads/2025/06/nestle-logo.png" alt="Nestlé">
-            </div>
-        </div>
-
-        <!-- Slide 7: Final -->
-        <div class="slide practice-slide" data-slide="7">
-            <div class="deco-stars" style="position: absolute; top: 80px; left: 100px;">
-                <span class="star-spin">✦</span> <span class="star-float" style="animation-delay: 0.3s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; top: 120px; right: 150px;">
-                <span class="star-spin" style="animation-delay: 0.5s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; top: 200px; left: 250px; font-size: 1.2rem;">
-                <span class="star-float" style="animation-delay: 0.8s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; top: 350px; right: 100px; font-size: 1.8rem;">
-                <span class="star-spin" style="animation-delay: 0.2s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; bottom: 250px; right: 200px; font-size: 1.3rem;">
-                <span class="star-float" style="animation-delay: 1s;">✦</span>
-            </div>
-            <div class="deco-stars" style="position: absolute; bottom: 200px; left: 150px; font-size: 1.6rem;">
-                <span class="star-spin" style="animation-delay: 0.7s;">✦</span>
-            </div>
-            <div style="position: absolute; bottom: 40px; left: 100px;">
-                <div class="robot-container">
-                    <img src="robot.png" alt="Robot mascot" class="robot-photo">
-                    <div class="speech-bubble">Thank You!</div>
-                </div>
-            </div>
-            
-            <div class="practice-icon">✨</div>
-            <h2 class="practice-title">Obrigado!</h2>
-            <p class="practice-subtitle">
-                <a href="https://teams.microsoft.com/l/chat/0/0?users=lucas.nascimento1@br.nestle.com" 
-                   target="_blank" 
-                   style="color: #2980b9; text-decoration: underline; cursor: pointer; transition: all 0.3s ease;"
-                   onmouseover="this.style.color='#c8102e'"
-                   onmouseout="this.style.color='#2980b9'">
-                   Dúvidas? Estamos à disposição.
-                </a>
-            </p>
-            
-            <div class="annotation" style="bottom: 200px; right: 600px; transform: rotate(-8deg); font-size: 1.5rem; color: #c8102e;">
-                👆 clique aqui!
-            </div>
-            
-            <div class="nestle-logo" style="bottom: 30px;">
-                <img src="https://logo-teka.com/wp-content/uploads/2025/06/nestle-logo.png" alt="Nestlé">
-            </div>
+    <!-- Font Switcher -->
+    <div class="font-switcher" id="fontSwitcher">
+        <button class="font-switcher-toggle" onclick="toggleFontPanel()">
+            Fontes
+        </button>
+        <div class="font-switcher-panel">
+            <h4>Escolha o Estilo de Fonte</h4>
+            <button class="font-option active" data-set="1" onclick="setFontSet(1)">
+                <span class="font-name">Playfair + Crimson</span>
+                <span class="font-preview">Elegante e clássico</span>
+            </button>
+            <button class="font-option" data-set="2" onclick="setFontSet(2)">
+                <span class="font-name">Lora + Merriweather</span>
+                <span class="font-preview">Robusto e legível</span>
+            </button>
+            <button class="font-option" data-set="3" onclick="setFontSet(3)">
+                <span class="font-name">Source Serif + Baskerville</span>
+                <span class="font-preview">Tradicional refinado</span>
+            </button>
+            <button class="font-option" data-set="4" onclick="setFontSet(4)">
+                <span class="font-name">DM Serif + DM Sans</span>
+                <span class="font-preview">Moderno e limpo</span>
+            </button>
+            <button class="font-option" data-set="5" onclick="setFontSet(5)">
+                <span class="font-name">Fraunces + Outfit</span>
+                <span class="font-preview">Contemporâneo e bold</span>
+            </button>
+            <button class="font-option" data-set="6" onclick="setFontSet(6)">
+                <span class="font-name">Bitter + Spectral</span>
+                <span class="font-preview">Forte e acessível</span>
+            </button>
         </div>
     </div>
 
-    <div class="nav-hint">
-        <span><kbd>←</kbd> <kbd>→</kbd> Navegar</span>
-        <span><kbd>Home</kbd> Início</span>
-        <span><kbd>End</kbd> Fim</span>
-    </div>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="club-mascot" style="margin-bottom: 1rem; opacity: 0; animation: slideUp 1s ease 0.1s forwards;">
+            <img src="https://i.ibb.co/GgsVw0W/Chat-GPT-Image-3-de-fev-de-2025-02-34-18.png" alt="Dotinho" class="mascot-float" style="width: 180px; height: auto; filter: drop-shadow(0 15px 25px rgba(44, 36, 22, 0.3));">
+        </div>
+        <p class="book-badge">A Linguagem Secreta do Carisma</p>
+        <div class="chapter-number">01>10</div>
+        <h1>Resumo <span>Fechamento</span></h1>
+        <p class="hero-subtitle">Um guia prático dos sinais não verbais, vocais, verbais e visuais que moldam primeiras impressões — e como ajustar seu “dial” para ficar na Zona do Carisma</p>
+        <div class="scroll-indicator">
+            <span>Explorar</span>
+        </div>
+    </header>
+
+    <!-- Capítulo 1 -->
+    <section class="intro-story" id="cap1">
+        <div class="story-content reveal">
+            <h2>Capítulo 1 — A Fórmula do Carisma</h2>
+            <p>A ciência por trás das primeiras impressões aponta duas perguntas que todo cérebro faz em segundos: <strong>"Posso confiar em você?"</strong> (amabilidade) e <strong>"Posso contar com você?"</strong> (competência).</p>
+            <p>Segundo pesquisas citadas no livro, <strong>amabilidade + competência</strong> explicam grande parte do impacto inicial — e o carisma aparece quando você consegue equilibrar as duas dentro da <strong>Zona do Carisma</strong>.</p>
+            <div class="highlight">"Carisma máximo = alto em amabilidade <strong>e</strong> alto em competência."</div>
+            <p>A chave é o <strong>dial do carisma</strong>: você ajusta sinais conforme o contexto (negociação, colaboração, entrevista, amizade) sem abandonar um dos polos.</p>
+        </div>
+        <div class="story-image reveal">
+            <div class="debate-visual">
+                <div style="background: rgba(255,255,255,0.35); border: 1px solid rgba(44,36,22,0.2); border-radius: 4px; padding: 1.5rem;">
+                    <p style="font-family: var(--font-accent); letter-spacing: 0.15em; text-transform: uppercase; font-size: 0.8rem; color: var(--ink-light); margin-bottom: 1rem;">A escala do carisma (visão rápida)</p>
+                    <p style="margin-bottom: 0.7rem;"><strong>☀️ Zona do Carisma</strong>: segurança + conexão.</p>
+                    <p style="margin-bottom: 0.7rem;"><strong>💙 Mais Amabilidade</strong>: confiança sem peso/limite.</p>
+                    <p style="margin-bottom: 0.7rem;"><strong>🔷 Mais Competência</strong>: respeito com distância.</p>
+                    <p style="margin: 0;"><strong>⚠️ Zona do Perigo</strong>: baixo impacto, pouca influência.</p>
+                </div>
+            </div>
+            <p class="debate-caption">Ajuste sinais — não sua personalidade</p>
+        </div>
+    </section>
+
+    <!-- Capítulo 2 -->
+    <section class="signals-analysis" id="cap2">
+        <div class="signals-header reveal">
+            <h2>Capítulo 2 — Os 3 Canais em Milissegundos</h2>
+            <p>Seu cérebro (e o dos outros) processa sinais não verbais, vocais e verbais ao mesmo tempo. Quando há conflito, o não verbal costuma vencer.</p>
+        </div>
+
+        <div class="signals-grid">
+            <div class="signal-card reveal" data-number="1">
+                <h3>Canal Não Verbal (60–65%)</h3>
+                <div class="nixon">
+                    <span class="label">Inclui</span>
+                    Postura, expressões faciais, gestos, contato visual, movimentos.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Por que importa</span>
+                    É automático e difícil de "desligar". Em dúvida, as pessoas acreditam no corpo.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="2">
+                <h3>Canal Vocal (30–35%)</h3>
+                <div class="nixon">
+                    <span class="label">Inclui</span>
+                    Tom, volume, ritmo, velocidade, pausas, inflexão.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Por que importa</span>
+                    A voz carrega emoção e intenção. Ela pode reforçar ou contradizer as palavras.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="3">
+                <h3>Canal Verbal (7%)</h3>
+                <div class="nixon">
+                    <span class="label">Inclui</span>
+                    Palavras escolhidas, estrutura, perguntas, metáforas e histórias.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Por que importa</span>
+                    É essencial para clareza e conteúdo complexo, mas sozinho tem menor impacto imediato.
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-highlight reveal">
+            <div class="stat-item">
+                <div class="stat-number">7s</div>
+                <div class="stat-desc">para formar impressão</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">93<span class="stat-unit">%</span></div>
+                <div class="stat-desc">da impressão vem de não verbal + vocal</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">7<span class="stat-unit">%</span></div>
+                <div class="stat-desc">vem das palavras</div>
+            </div>
+        </div>
+
+        <div class="fun-tip reveal">
+            <h4>O poder da congruência</h4>
+            <p>Quando os três canais contam a mesma história, você parece mais autêntico, persuasivo e memorável. Quando entram em conflito, nasce a desconfiança.</p>
+        </div>
+    </section>
+
+    <!-- Capítulo 3 -->
+    <section class="power-signals" id="cap3">
+        <div class="signals-header reveal">
+            <h2>Capítulo 3 — Linguagem Corporal dos Líderes</h2>
+            <p>Cinco sinais não verbais que aumentam conexão e confiança rapidamente (e funcionam até em vídeo chamadas).</p>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">01</div>
+                <h3>Inclinar-se <span>para a Frente</span></h3>
+                <p>Incline alguns centímetros na direção do interlocutor para sinalizar interesse e envolvimento. Use para enfatizar pontos-chave e mostrar concordância.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>Incline-se para demonstrar e estimular interesse.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gesture-item" style="transform: scale(1.2);">
+                    <div class="gesture-icon">↗️</div>
+                    <div class="gesture-name">Inclinação</div>
+                    <div class="gesture-desc">Interesse e apoio</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">02</div>
+                <h3>Corpo <span>Aberto</span></h3>
+                <p>Evite barreiras (braços cruzados, objetos no peito). Mãos visíveis e torso livre tendem a abrir a conversa — e a mente — do outro lado.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>Corpo fechado indica mente fechada… e fecha a mente dos outros.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gesture-item" style="transform: scale(1.2);">
+                    <div class="gesture-icon">👐</div>
+                    <div class="gesture-name">Abertura</div>
+                    <div class="gesture-desc">Sem bloqueios</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">03</div>
+                <h3>Tripé do <span>Poder</span></h3>
+                <p>Base estável: peso distribuído, pés na largura dos ombros, postura ereta e relaxada. Ajuda a reduzir inquietação e melhora a projeção vocal.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>Uma base firme cria sensação (e sinal) de estabilidade.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gesture-item" style="transform: scale(1.2);">
+                    <div class="gesture-icon">⚓</div>
+                    <div class="gesture-name">Base</div>
+                    <div class="gesture-desc">Estabilidade</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">04</div>
+                <h3>Palmas <span>Visíveis</span></h3>
+                <p>Mostrar as palmas comunica segurança e honestidade ("não sou ameaça"). Evite mãos escondidas em bolsos, atrás do corpo ou punhos fechados.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>Palmas visíveis aumentam percepção de abertura e confiança.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gesture-item" style="transform: scale(1.2);">
+                    <div class="gesture-icon">✋</div>
+                    <div class="gesture-name">Palmas</div>
+                    <div class="gesture-desc">Transparência</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">05</div>
+                <h3>Fronting <span>Total</span></h3>
+                <p>Vire tronco, quadris e pés para a pessoa. É uma forma poderosa de dizer: "você é a prioridade agora". Útil em conversas importantes e 1:1.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>De frente para você = atenção plena.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gesture-item" style="transform: scale(1.2);">
+                    <div class="gesture-icon">🎯</div>
+                    <div class="gesture-name">Fronting</div>
+                    <div class="gesture-desc">Engajamento</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-highlight reveal">
+            <div class="stat-item">
+                <div class="stat-number">65–90<span class="stat-unit">%</span></div>
+                <div class="stat-desc">da comunicação pode ser não verbal</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5,4<span class="stat-unit">%</span></div>
+                <div class="stat-desc">ganho em conversão só com postura aberta (teste A/B)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">10s</div>
+                <div class="stat-desc">de inclinação aumentam motivação neural (estudo citado)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capítulo 4 -->
+    <section class="interruption-section reveal" id="cap4">
+        <h2>Capítulo 4 — O Fator Uau (Sinais de Amabilidade)</h2>
+        <p style="text-align: center; color: var(--ink-light); margin: -1rem auto 2.5rem; max-width: 900px;">Pequenos sinais que fazem pessoas se sentirem seguras, vistas e bem-vindas — e criam um efeito halo positivo ao seu redor.</p>
+
+        <div class="techniques-timeline">
+            <div class="technique-card">
+                <div class="technique-icon">🙂</div>
+                <h4>Inclinação de Cabeça</h4>
+                <p>Incline levemente ao ouvir. Comunica acessibilidade e “me conte mais”.</p>
+                <div class="intensity-label">Sutil</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">✅</div>
+                <h4>Assentir</h4>
+                <p>Faz o outro se sentir validado e alimenta um ciclo de sinais positivos.</p>
+                <div class="intensity-label">Validação</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">👀</div>
+                <h4>Sobrancelhas Elevadas</h4>
+                <p>O “flash de sobrancelhas” é um cumprimento universal que dura frações de segundo.</p>
+                <div class="intensity-label">Reconhecimento</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">😁</div>
+                <h4>Sorriso Duchenne</h4>
+                <p>Sorriso pleno chega aos olhos. É raro, percebido e valorizado.</p>
+                <div class="intensity-label">Calor</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">🤝</div>
+                <h4>Toque Apropriado</h4>
+                <p>Quando o contexto permite, um toque leve pode aumentar conexão e memorabilidade.</p>
+                <div class="intensity-label">Conexão</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">🪞</div>
+                <h4>Espelhamento</h4>
+                <p>Imite de forma sutil a postura geral do outro (com atraso) para gerar afinidade.</p>
+                <div class="intensity-label">Afinidade</div>
+            </div>
+        </div>
+
+        <div class="fun-tip reveal" style="max-width: 800px; margin: 3rem auto;">
+            <h4>Efeito halo + ciclo dos sinais</h4>
+            <p>Sinais de amabilidade fazem as pessoas perceberem “mais” coisas boas em você (efeito halo). E quando você ouve com sinais positivos, o outro tende a pensar com mais criatividade e abertura.</p>
+        </div>
+    </section>
+
+    <!-- Capítulo 5 -->
+    <section class="power-signals" id="cap5">
+        <div class="signals-header reveal">
+            <h2>Capítulo 5 — Como Parecer Poderoso (Competência)</h2>
+            <p>Cinco sinais que comunicam inteligência, capacidade e autoridade sem precisar “forçar” as palavras.</p>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">01</div>
+                <h3>Postura <span>Expansiva</span></h3>
+                <p>Ocupe espaço com naturalidade: peito aberto, ombros para trás, peso distribuído, cabeça erguida. Use antes e durante momentos importantes.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>Seu corpo “fala” competência antes da sua primeira frase.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gesture-item" style="transform: scale(1.2);">
+                    <div class="gesture-icon">🧍</div>
+                    <div class="gesture-name">Postura</div>
+                    <div class="gesture-desc">Autoridade calma</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">02</div>
+                <h3>Contato Visual <span>Apropriado</span></h3>
+                <p>A faixa citada como ideal é cerca de <strong>50–60%</strong> do tempo: pouco parece evasivo; demais pode intimidar. Uma técnica simples é alternar olhar entre um olho, o outro e a boca.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>Contato visual constante não é sempre melhor; o alvo é presença, não pressão.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gesture-item" style="transform: scale(1.2);">
+                    <div class="gesture-icon">👁️</div>
+                    <div class="gesture-name">Olhar</div>
+                    <div class="gesture-desc">Foco e clareza</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">03</div>
+                <h3>Mãos em <span>Campanário</span></h3>
+                <p>Pontas dos dedos se tocando (palmas sem encostar) comunicam confiança e certeza, especialmente em declarações e negociações.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>Use o campanário para marcar um momento de reflexão confiante.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gesture-item" style="transform: scale(1.2);">
+                    <div class="gesture-icon">🤲</div>
+                    <div class="gesture-name">Campanário</div>
+                    <div class="gesture-desc">Certeza</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">04</div>
+                <h3>Excelência na <span>Explicação</span></h3>
+                <p>Gestos ilustrativos (contar nos dedos, mostrar tamanhos, indicar direção) aumentam compreensão e deixam sua mensagem mais nítida.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>Quando suas mãos organizam ideias, sua competência fica visível.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gestures-showcase" style="flex-direction: column;">
+                    <div class="gesture-item">
+                        <div class="gesture-icon">☝️</div>
+                        <div class="gesture-name">Números</div>
+                        <div class="gesture-desc">Estrutura</div>
+                    </div>
+                    <div class="gesture-item">
+                        <div class="gesture-icon">👐</div>
+                        <div class="gesture-name">Tamanho</div>
+                        <div class="gesture-desc">Concretude</div>
+                    </div>
+                    <div class="gesture-item">
+                        <div class="gesture-icon">👉</div>
+                        <div class="gesture-name">Direção</div>
+                        <div class="gesture-desc">Processo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-signal reveal">
+            <div class="power-content">
+                <div class="power-signal-number">05</div>
+                <h3>Controle da <span>Palma</span></h3>
+                <p>Palma para baixo tende a soar como <strong>afirmação</strong> e autoridade; palma para cima tende a soar como <strong>pedido</strong>. Uma técnica anti-interrupção é levantar a mão (palma para baixo) como um “pare” enquanto mantém a fala calma.</p>
+                <div class="principle-box">
+                    <strong>Princípio</strong>
+                    <p>A palma direciona como sua mensagem é recebida: convite ou comando.</p>
+                </div>
+            </div>
+            <div class="power-visual">
+                <div class="gesture-item" style="transform: scale(1.2);">
+                    <div class="gesture-icon">✋</div>
+                    <div class="gesture-name">Palma</div>
+                    <div class="gesture-desc">Autoridade</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capítulo 6 -->
+    <section class="signals-analysis" id="cap6">
+        <div class="signals-header reveal">
+            <h2>Capítulo 6 — Zona do Perigo e Microexpressões</h2>
+            <p>Aprenda a reconhecer as emoções universais (rápidas e difíceis de falsificar) e a evitar sinais que derrubam sua presença.</p>
+        </div>
+
+        <div class="signals-grid">
+            <div class="signal-card reveal" data-number="1">
+                <h3>Raiva</h3>
+                <div class="nixon">
+                    <span class="label">Sinais</span>
+                    Sobrancelhas baixas e franzidas, mandíbula tensa, lábios apertados.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Significa</span>
+                    Ameaça percebida, confronto, irritação.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="2">
+                <h3>Tristeza</h3>
+                <div class="nixon">
+                    <span class="label">Sinais</span>
+                    Cantos da boca para baixo, sobrancelhas oblíquas, olhos sem brilho.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Significa</span>
+                    Perda, dor, desânimo.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="3">
+                <h3>Nojo</h3>
+                <div class="nixon">
+                    <span class="label">Sinais</span>
+                    Nariz franzido, lábio superior levantado, olhos semicerrados.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Significa</span>
+                    Repulsa, rejeição, aversão.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="4">
+                <h3>Desprezo</h3>
+                <div class="nixon">
+                    <span class="label">Sinais</span>
+                    Um canto da boca levantado (assimétrico), olhar de superioridade.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Significa</span>
+                    Superioridade moral, desconexão, “você não vale meu tempo”.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="5">
+                <h3>Medo</h3>
+                <div class="nixon">
+                    <span class="label">Sinais</span>
+                    Sobrancelhas erguidas e juntas, olhos arregalados, boca aberta.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Significa</span>
+                    Perigo percebido, ansiedade, ameaça.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="6">
+                <h3>Surpresa</h3>
+                <div class="nixon">
+                    <span class="label">Sinais</span>
+                    Sobrancelhas para cima, olhos abertos, boca em “O”.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Significa</span>
+                    Inesperado, choque, novidade (curto).
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="7">
+                <h3>Alegria</h3>
+                <div class="nixon">
+                    <span class="label">Sinais</span>
+                    Cantos da boca para cima, bochechas levantadas, olhos com rugas (Duchenne).
+                </div>
+                <div class="kennedy">
+                    <span class="label">Significa</span>
+                    Prazer, satisfação, felicidade genuína.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="8">
+                <h3>Sinais da Zona do Perigo</h3>
+                <div class="nixon">
+                    <span class="label">Evite</span>
+                    Ombros curvados, bloqueios excessivos, inquietação, inclinar-se para trás, contato visual zero, sorriso falso constante.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Por quê</span>
+                    Eles transmitem derrota, desconforto e baixa confiabilidade — mesmo quando suas palavras são boas.
+                </div>
+            </div>
+        </div>
+
+        <div class="fun-tip reveal">
+            <h4>O sinal que destrói relações</h4>
+            <p>No livro, o desprezo é tratado como um dos sinais mais perigosos: pesquisas citadas apontam alta capacidade de previsão de divórcio ao observar desprezo entre casais.</p>
+        </div>
+    </section>
+
+    <!-- Capítulo 7 -->
+    <section class="interruption-section reveal" id="cap7">
+        <h2>Capítulo 7 — Sinais Vocais de Competência</h2>
+        <p style="text-align: center; color: var(--ink-light); margin: -1rem auto 2.5rem; max-width: 900px;">Cinco técnicas para transformar sua voz em instrumento de autoridade e influência.</p>
+
+        <div class="techniques-timeline">
+            <div class="technique-card">
+                <div class="technique-icon">🧍</div>
+                <h4>Postura primeiro</h4>
+                <p>Postura expansiva melhora projeção e tende a deixar o tom mais firme e grave.</p>
+                <div class="intensity-label">Base</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">🌬️</div>
+                <h4>Fale ao soltar o ar</h4>
+                <p>Comece a frase enquanto expira. Ajuda a reduzir “ãh/hm” e instabilidade.</p>
+                <div class="intensity-label">Controle</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">✂️</div>
+                <h4>Frases curtas</h4>
+                <p>Frases mais curtas soam mais decididas e autoritativas do que justificativas longas.</p>
+                <div class="intensity-label">Clareza</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">⏸️</div>
+                <h4>Pausas de poder</h4>
+                <p>Pausas estratégicas (1–3s) aumentam percepção de competência e controle.</p>
+                <div class="intensity-label">Presença</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">↘️</div>
+                <h4>Finalize para baixo</h4>
+                <p>Evite “entonação de pergunta” no fim. Termine como afirmação e pause.</p>
+                <div class="intensity-label">Certeza</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capítulo 8 -->
+    <section class="interruption-section reveal" id="cap8">
+        <h2>Capítulo 8 — Sinais Vocais de Amabilidade</h2>
+        <p style="text-align: center; color: var(--ink-light); margin: -1rem auto 2.5rem; max-width: 900px;">Cinco ajustes que deixam a voz mais calorosa sem perder credibilidade.</p>
+
+        <div class="techniques-timeline">
+            <div class="technique-card">
+                <div class="technique-icon">😊</div>
+                <h4>Sorriso vocal</h4>
+                <p>Sorrir enquanto fala muda o som. As pessoas percebem rapidamente, mesmo sem vídeo.</p>
+                <div class="intensity-label">Calor</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">🎚️</div>
+                <h4>Tom estratégico</h4>
+                <p>Mais agudo tende a soar amável; mais grave tende a soar autoritário. Varie conscientemente.</p>
+                <div class="intensity-label">Dial</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">🏃</div>
+                <h4>Velocidade variada</h4>
+                <p>Partes importantes: devagar. Transições: mais rápido. Monotonia derruba atenção.</p>
+                <div class="intensity-label">Ritmo</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">🔊</div>
+                <h4>Volume caloroso</h4>
+                <p>Nem alto (agressivo), nem baixo (apagado). Um volume conversacional gera conexão.</p>
+                <div class="intensity-label">Equilíbrio</div>
+            </div>
+
+            <div class="technique-card">
+                <div class="technique-icon">☎️</div>
+                <h4>Treine o “alô”</h4>
+                <p>Pratique a mesma palavra com emoções e posturas diferentes para ganhar controle vocal.</p>
+                <div class="intensity-label">Prática</div>
+            </div>
+        </div>
+
+        <div class="fun-tip reveal" style="max-width: 800px; margin: 3rem auto;">
+            <h4>Espelhamento vocal</h4>
+            <p>Igualar sutilmente volume, ritmo e energia do interlocutor aumenta a sensação de sintonia — sem imitar de forma óbvia.</p>
+        </div>
+    </section>
+
+    <!-- Capítulo 9 -->
+    <section class="signals-analysis" id="cap9">
+        <div class="signals-header reveal">
+            <h2>Capítulo 9 — Sinais Verbais</h2>
+            <p>As palavras têm menor peso na impressão inicial, mas multiplicam impacto quando organizam emoção, clareza e significado.</p>
+        </div>
+
+        <div class="signals-grid">
+            <div class="signal-card reveal" data-number="1">
+                <h3>Conte histórias</h3>
+                <div class="nixon">
+                    <span class="label">Por quê</span>
+                    Histórias são mais fáceis de lembrar do que fatos isolados e carregam emoção.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Como usar</span>
+                    Personagem + desafio + transformação + lição.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="2">
+                <h3>Perguntas abertas</h3>
+                <div class="nixon">
+                    <span class="label">Evite</span>
+                    Perguntas de sim/não quando você quer conexão real.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Use</span>
+                    “O que mais chamou sua atenção?” “Como você se sentiu quando…?”
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="3">
+                <h3>Regra de três</h3>
+                <div class="nixon">
+                    <span class="label">Princípio</span>
+                    O cérebro ama padrões de três: razões, benefícios, etapas.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Exemplo</span>
+                    “Tenho 3 ideias…” e em seguida entregue 1, 2, 3.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="4">
+                <h3>Metáforas e analogias</h3>
+                <div class="nixon">
+                    <span class="label">Princípio</span>
+                    Transforme o abstrato em concreto com imagens familiares.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Dica</span>
+                    Compare o novo com o conhecido e corte o excesso técnico.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="5">
+                <h3>Menos é mais</h3>
+                <div class="nixon">
+                    <span class="label">O risco</span>
+                    Palavras demais podem matar a emoção e a autoridade.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Ação</span>
+                    Se dá para cortar sem perder sentido, corte.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capítulo 10 -->
+    <section class="signals-analysis" id="cap10">
+        <div class="signals-header reveal">
+            <h2>Capítulo 10 — Presença Visual</h2>
+            <p>Cores, roupas e ambiente completam a mensagem. O visual pode reforçar competência, amabilidade e congruência.</p>
+        </div>
+
+        <div class="signals-grid">
+            <div class="signal-card reveal" data-number="1">
+                <h3>Vermelho</h3>
+                <div class="nixon">
+                    <span class="label">Transmite</span>
+                    Urgência, ação, paixão.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Quando usar</span>
+                    Chamadas para ação e contextos de energia (com moderação).
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="2">
+                <h3>Azul</h3>
+                <div class="nixon">
+                    <span class="label">Transmite</span>
+                    Confiança, calma, profissionalismo.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Quando usar</span>
+                    Ambientes corporativos, marca pessoal “segura” e estável.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="3">
+                <h3>Verde</h3>
+                <div class="nixon">
+                    <span class="label">Transmite</span>
+                    Crescimento, equilíbrio, saúde.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Quando usar</span>
+                    Bem-estar, sustentabilidade, ambientes com plantas.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="4">
+                <h3>Amarelo</h3>
+                <div class="nixon">
+                    <span class="label">Transmite</span>
+                    Energia, otimismo, atenção.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Cuidado</span>
+                    Excesso pode gerar ansiedade; use para destaque.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="5">
+                <h3>Preto & branco</h3>
+                <div class="nixon">
+                    <span class="label">Preto</span>
+                    Sofisticação, poder, elegância.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Branco</span>
+                    Simplicidade, limpeza, espaço.
+                </div>
+            </div>
+
+            <div class="signal-card reveal" data-number="6">
+                <h3>Ambiente (presencial e vídeo)</h3>
+                <div class="nixon">
+                    <span class="label">Competência visual</span>
+                    Organização, higiene, itens profissionais coerentes.
+                </div>
+                <div class="kennedy">
+                    <span class="label">Amabilidade visual</span>
+                    Toques pessoais moderados (planta, arte, fotos na medida).
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charisma Chart -->
+    <section class="charisma-scale-section">
+        <h2 class="reveal" style="font-family: var(--font-display); font-size: 2.5rem; text-align: center; margin-bottom: 1rem; color: var(--ink-black);">A Escala do Carisma Completa</h2>
+        <p class="reveal" style="text-align: center; color: var(--ink-light); margin-bottom: 4rem; font-size: 1.1rem;">Um checklist prático para alinhar corpo, voz e palavras</p>
+        
+        <div class="charisma-cards-container reveal">
+            <div class="charisma-card warmth-card">
+                <div class="card-icon-wrapper">
+                    <div class="card-icon">☀️</div>
+                </div>
+                <h3>Sinais Não Verbais</h3>
+                <div class="card-divider"></div>
+                <ul class="charisma-list">
+                    <li><span class="list-icon">✓</span>Inclinar-se para frente</li>
+                    <li><span class="list-icon">✓</span>Corpo aberto</li>
+                    <li><span class="list-icon">✓</span>Palmas visíveis</li>
+                    <li><span class="list-icon">✓</span>Fronting total</li>
+                    <li><span class="list-icon">✓</span>Sorriso Duchenne</li>
+                </ul>
+            </div>
+
+            <div class="charisma-card presence-card">
+                <div class="card-icon-wrapper">
+                    <div class="card-icon">🎤</div>
+                </div>
+                <h3>Sinais Vocais</h3>
+                <div class="card-divider"></div>
+                <ul class="charisma-list">
+                    <li><span class="list-icon">✓</span>Postura vocal</li>
+                    <li><span class="list-icon">✓</span>Falar ao soltar o ar</li>
+                    <li><span class="list-icon">✓</span>Frases curtas</li>
+                    <li><span class="list-icon">✓</span>Pausas de poder</li>
+                    <li><span class="list-icon">✓</span>Velocidade variada</li>
+                    <li><span class="list-icon">✓</span>Sorriso vocal</li>
+                </ul>
+            </div>
+
+            <div class="charisma-card competence-card">
+                <div class="card-icon-wrapper">
+                    <div class="card-icon">⚡</div>
+                </div>
+                <h3>Sinais Verbais & Visuais</h3>
+                <div class="card-divider"></div>
+                <ul class="charisma-list two-columns">
+                    <li><span class="list-icon">✓</span>Histórias envolventes</li>
+                    <li><span class="list-icon">✓</span>Perguntas abertas</li>
+                    <li><span class="list-icon">✓</span>Regra de três</li>
+                    <li><span class="list-icon">✓</span>Metáforas claras</li>
+                    <li><span class="list-icon">✓</span>Cores estratégicas</li>
+                    <li><span class="list-icon">✓</span>Ambiente organizado</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Quote -->
+    <section class="final-section">
+        <blockquote class="final-quote reveal">
+            "<span>Pequenos sinais</span>, <span>Grandes impactos</span>."
+        </blockquote>
+        <p class="final-author reveal">— A Linguagem Secreta do Carisma</p>
+
+        <div class="book-info reveal">
+            <p class="book-title-final">A Linguagem Secreta do Carisma</p>
+            <p style="margin-top: 1rem; font-style: italic;">Lucas Nascimento - Data Operations Team</p>
+        </div>
+    </section>
 
     <script>
-        const slides = document.querySelectorAll('.slide');
-        const progressBar = document.getElementById('progressBar');
-        const slideCounter = document.getElementById('slideCounter');
-        const mdToggle = document.getElementById('mdToggle');
-        const paperWrapper = document.getElementById('paperWrapper');
-        
-        let currentSlide = 0;
-        let dissectionStep = 0;
-        const totalDissectionSteps = 5;
-        const DISSECTION_SLIDE_INDEX = 3;
-
-        // Toggle Markdown Mode
-        mdToggle.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                paperWrapper.classList.add('markdown-mode');
-            } else {
-                paperWrapper.classList.remove('markdown-mode');
-            }
-        });
-
-        function updateSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active', 'prev');
-                if (i === index) {
-                    slide.classList.add('active');
-                } else if (i < index) {
-                    slide.classList.add('prev');
-                }
-            });
-
-            const progress = ((index + 1) / slides.length) * 100;
-            progressBar.style.width = progress + '%';
-            slideCounter.textContent = `${index + 1} / ${slides.length}`;
+        // Font Switcher Functions
+        function toggleFontPanel() {
+            const switcher = document.getElementById('fontSwitcher');
+            switcher.classList.toggle('active');
         }
 
-        function updateDissectionStep(step) {
-            // Segments
-            document.querySelectorAll('.segment').forEach(el => {
-                const segId = parseInt(el.dataset.segment);
-                if (step === 0) {
-                    el.classList.remove('active');
-                    el.classList.add('idle');
-                } else {
-                    el.classList.remove('idle');
-                    if (segId === step) {
-                        el.classList.add('active');
-                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    } else {
-                        el.classList.remove('active');
-                    }
-                }
-            });
-
-            // Annotations
-            document.querySelectorAll('.note-card').forEach(el => {
-                el.classList.remove('visible');
-            });
-            const activeNote = document.getElementById(`note-${step}`);
-            if (activeNote) activeNote.classList.add('visible');
-        }
-
-        function next() {
-            if (currentSlide === DISSECTION_SLIDE_INDEX) {
-                if (dissectionStep < totalDissectionSteps) {
-                    dissectionStep++;
-                    updateDissectionStep(dissectionStep);
-                    return;
-                }
-            }
-
-            if (currentSlide < slides.length - 1) {
-                currentSlide++;
-                updateSlide(currentSlide);
-            }
-        }
-
-        function prev() {
-            if (currentSlide === DISSECTION_SLIDE_INDEX) {
-                if (dissectionStep > 0) {
-                    dissectionStep--;
-                    updateDissectionStep(dissectionStep);
-                    return;
-                }
-            }
-
-            if (currentSlide > 0) {
-                currentSlide--;
-                updateSlide(currentSlide);
-            }
-        }
-
-        function goToSlide(index) {
-            if (index >= 0 && index < slides.length) {
-                currentSlide = index;
-                dissectionStep = 0;
-                if (currentSlide === DISSECTION_SLIDE_INDEX) {
-                    updateDissectionStep(0);
-                }
-                updateSlide(currentSlide);
-            }
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            switch(e.key) {
-                case 'ArrowRight':
-                case 'ArrowDown':
-                case ' ':
-                case 'PageDown':
-                    e.preventDefault();
-                    next();
-                    break;
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                case 'PageUp':
-                    e.preventDefault();
-                    prev();
-                    break;
-                case 'Home':
-                    e.preventDefault();
-                    goToSlide(0);
-                    break;
-                case 'End':
-                    e.preventDefault();
-                    goToSlide(slides.length - 1);
-                    break;
-            }
-        });
-
-        // Click nav (simple zones)
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.checklist-item') || e.target.closest('.toggle-switch') || e.target.closest('.paper-content')) return;
+        function setFontSet(setNumber) {
+            // Remove all font-set classes
+            document.body.classList.remove('font-set-2', 'font-set-3', 'font-set-4', 'font-set-5', 'font-set-6');
             
-            if (e.clientX > window.innerWidth / 2) next();
-            else prev();
-        });
-
-        // Touch support
-        let touchStartX = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            const touchEndX = e.changedTouches[0].clientX;
-            const diff = touchStartX - touchEndX;
+            // Add the selected font set class (set 1 is default, no class needed)
+            if (setNumber > 1) {
+                document.body.classList.add('font-set-' + setNumber);
+            }
             
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) next();
-                else prev();
+            // Update active button state
+            document.querySelectorAll('.font-option').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.font-option[data-set="' + setNumber + '"]').classList.add('active');
+            
+            // Save preference to localStorage
+            localStorage.setItem('preferredFontSet', setNumber);
+        }
+
+        // Load saved font preference on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedFontSet = localStorage.getItem('preferredFontSet');
+            if (savedFontSet) {
+                setFontSet(parseInt(savedFontSet));
             }
         });
 
-        // Initialize
-        updateSlide(0);
+        // Close panel when clicking outside
+        document.addEventListener('click', function(e) {
+            const switcher = document.getElementById('fontSwitcher');
+            if (!switcher.contains(e.target)) {
+                switcher.classList.remove('active');
+            }
+        });
+
+        // Scroll reveal animation
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
