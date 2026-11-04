@@ -1,193 +1,134 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AceleraAI - Guia de Brainstorm</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050817">
+  <title>TechDay | Contagem regressiva</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="lucide.min.js" defer></script>
+  <script src="sessions.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
-    <!-- Base Layout -->
-    <main class="bento-container">
-        
-        <!-- Hero Box -->
-        <div class="bento-card bento-hero">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-            <div class="blob blob-3"></div>
-            <div class="hero-content">
-                <img src="Acelera.png" alt="AceleraAI" class="logo-img">
-                <p class="subtitle">Guia de Idealização e Fluxo para Newsletter</p>
-            </div>
-            <div class="hero-news" id="ai-news">
-                <h4>AI News</h4>
-                <div class="news-list" id="news-list">
-                    <span class="news-loading">Buscando no radar...</span>
-                </div>
-            </div>
+  <div class="stage-frame" aria-hidden="true"></div>
+  <div class="signal-field" aria-hidden="true"><div class="signal-lines"></div></div>
+
+  <header class="masthead">
+    <div class="event-identity"><span class="identity-mark">NBS</span><span id="event-name">TechDay / TechWeek</span></div>
+    <div class="room-status"><span class="status-dot"></span><span id="status-text">SALA DE ESPERA</span></div>
+  </header>
+
+  <main class="stage">
+    <figure class="template-card" id="template-card" hidden></figure>
+    <div class="brand">
+      <img class="brand-logo" id="brand-logo" src="Logo.png" alt="TechDay @ NBS">
+      <div class="techweek" id="techweek"><i data-lucide="plus" aria-hidden="true"></i><span>tech<span class="week">week</span></span></div>
+    </div>
+
+    <section class="countdown" aria-label="Contagem regressiva">
+      <p class="countdown-eyebrow" id="countdown-label">COMEÇAMOS EM</p>
+      <div class="clock" id="clock" role="timer" aria-label="5 minutos e 0 segundos" aria-live="off">
+        <div class="time-unit"><span class="digits" id="minutes">05</span><span class="unit-label">MINUTOS</span></div>
+        <span class="clock-colon" aria-hidden="true">:</span>
+        <div class="time-unit"><span class="digits" id="seconds">00</span><span class="unit-label">SEGUNDOS</span></div>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Tempo restante" aria-valuemin="0" aria-valuemax="300" aria-valuenow="300" id="progress"><div id="progress-fill"></div></div>
+      <h1 id="display-message">A gente já vai começar.</h1>
+      <p class="supporting-message" id="display-detail">Enquanto isso, prepare seu café.</p>
+    </section>
+
+    <div class="connection" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <section class="music-panel" id="music-panel" aria-label="Música da sala de espera" hidden>
+      <div class="music-player" id="music-player"></div>
+      <div class="music-bar">
+        <div class="music-controls">
+          <button class="icon-button" id="music-prev" type="button" aria-label="Música anterior" data-tooltip="Anterior" hidden disabled><i data-lucide="skip-back"></i></button>
+          <button class="icon-button" id="music-button" type="button" aria-label="Tocar música" data-tooltip="Tocar música" disabled><i data-lucide="play"></i></button>
+          <button class="icon-button" id="music-next" type="button" aria-label="Próxima música" data-tooltip="Próxima" hidden disabled><i data-lucide="skip-forward"></i></button>
+          <div class="music-volume-group"><button class="icon-button" id="music-mute" type="button" aria-label="Silenciar" data-tooltip="Silenciar"><i data-lucide="volume-2"></i></button><div class="music-volume-flyout"><input id="music-volume" type="range" min="0" max="100" value="30" aria-label="Volume da música"></div></div>
         </div>
+        <p class="music-title" id="music-title" aria-live="polite"></p>
+        <span class="music-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
+        <span class="music-disc" aria-hidden="true" hidden></span>
+      </div>
+      <p class="music-status" id="music-status" role="status" aria-live="polite"></p>
+    </section>
+  </main>
 
-        <!-- Poster Box -->
-        <div class="bento-card bento-poster">
-            <div class="poster-left">
-                <h2>Autor da Semana</h2>
-                <div class="poster-info">
-                    <div class="poster-avatar" id="poster-avatar">
-                        <img id="poster-photo" src="" alt="" />
-                    </div>
-                    <div class="poster-details">
-                        <span class="poster-label">Responsável</span>
-                        <h3 id="poster-name">Carregando...</h3>
-                        <p id="poster-email" class="poster-email">...</p>
-                        <p class="poster-date">Postagem: <strong id="poster-date">Sexta-feira</strong></p>
-                    </div>
-                </div>
-                <div class="rotation-list">
-                    <h4>Próximos da Fila</h4>
-                    <ul id="rotation-list"></ul>
-                </div>
-            </div>
-            <div class="poster-right">
-                <div class="mini-cal">
-                    <div class="mini-cal-header">
-                        <button class="cal-nav-btn" id="cal-prev">&#8249;</button>
-                        <span class="mini-cal-title" id="cal-title"></span>
-                        <button class="cal-nav-btn" id="cal-next">&#8250;</button>
-                    </div>
-                    <div class="mini-cal-weekdays">
-                        <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
-                    </div>
-                    <div class="mini-cal-grid" id="cal-grid"></div>
-                </div>
-            </div>
+  <footer class="footer">
+    <div class="footer-brand"><img class="footer-logo" id="footer-logo" src="NBS_LATAM_Logo_RGB_White%20(1)%20(1).png" alt="Nestlé Business Solutions LATAM"></div>
+    <nav class="controls" aria-label="Controles da contagem">
+      <button class="icon-button" id="reset-button" type="button" aria-label="Reiniciar contagem" data-tooltip="Reiniciar"><i data-lucide="rotate-ccw"></i></button>
+      <button class="start-button" id="start-button" type="button"><i data-lucide="play"></i><span id="start-label">Iniciar</span></button>
+      <span class="control-divider" aria-hidden="true"></span>
+      <button class="icon-button" id="settings-button" type="button" aria-label="Configurar contagem" data-tooltip="Configurar"><i data-lucide="sliders-horizontal"></i></button>
+      <button class="icon-button" id="fullscreen-button" type="button" aria-label="Entrar em tela cheia" data-tooltip="Tela cheia"><i data-lucide="maximize"></i></button>
+    </nav>
+    <div class="footer-note">TECNOLOGIA QUE CONECTA<span>Ideias que transformam.</span></div>
+  </footer>
+
+  <p class="sr-only" id="announcement" role="status" aria-live="polite"></p>
+
+  <dialog id="settings-dialog" aria-labelledby="settings-title">
+    <form id="settings-form">
+      <div class="dialog-header"><div><p class="panel-eyebrow">DO SEU JEITO</p><h2 id="settings-title">Prepare o encontro</h2></div><button class="close-button icon-button" id="close-settings" type="button" aria-label="Fechar configurações" data-tooltip="Fechar"><i data-lucide="x"></i></button></div>
+      <div class="settings-grid">
+      <fieldset class="duration-settings">
+        <legend>Duração</legend>
+        <div class="presets" aria-label="Durações predefinidas">
+          <label><input type="radio" name="preset" value="180"><span>3 min</span></label>
+          <label><input type="radio" name="preset" value="300" checked><span>5 min</span></label>
+          <label><input type="radio" name="preset" value="600"><span>10 min</span></label>
+          <label><input type="radio" name="preset" value="900"><span>15 min</span></label>
         </div>
-
-        <!-- Etapa 1: Referências -->
-        <div class="bento-card bento-ref">
-            <div class="step-badge">Etapa 1</div>
-            <h2>Inspiração</h2>
-            <p class="section-desc">Consulte as comunidades no Viva Engage.</p>
-            <div class="communities-list">
-                <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI2MjE0ODkyNzQ4OSJ9/new" target="_blank" class="community-item">
-                    <span class="community-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
-                    <span class="community-name">Power Platform</span>
-                </a>
-                <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI1OTc0Njg5MzgyNSJ9/new" target="_blank" class="community-item">
-                    <span class="community-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg></span>
-                    <span class="community-name">M365 Copilot</span>
-                </a>
-                <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI2MjI1MzQ0MTAyNSJ9/new" target="_blank" class="community-item">
-                    <span class="community-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-                    <span class="community-name">Conversational AI</span>
-                </a>
-                <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI2MjMyMTY4MDM4NSJ9/new" target="_blank" class="community-item">
-                    <span class="community-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/></svg></span>
-                    <span class="community-name">Artificial Intelligence</span>
-                </a>
-                <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI2MjQ4MjY2MTM3NyJ9/new" target="_blank" class="community-item">
-                    <span class="community-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></span>
-                    <span class="community-name">Microsoft 365</span>
-                </a>
-            </div>
+        <div class="duration-inputs"><label for="duration-minutes">Minutos<input id="duration-minutes" type="number" min="0" max="180" value="5" required inputmode="numeric"></label><span>:</span><label for="duration-seconds">Segundos<input id="duration-seconds" type="number" min="0" max="59" value="0" required inputmode="numeric"></label></div>
+      </fieldset>
+      <fieldset class="music-settings">
+        <legend>Música da sala de espera</legend>
+        <label for="youtube-input">Link do YouTube (vídeo ou playlist)<input id="youtube-input" type="text" inputmode="url" autocomplete="off" maxlength="2048" placeholder="https://www.youtube.com/watch?v=..."></label>
+        <p class="field-hint" id="youtube-check" role="status" aria-live="polite"></p>
+        <label class="music-volume" for="volume-input"><i data-lucide="volume-2" aria-hidden="true"></i><span>Volume</span><input id="volume-input" type="range" min="0" max="100" value="30"><output id="volume-value" for="volume-input">30%</output></label>
+      </fieldset>
+      </div>
+      <div class="form-fields">
+        <label for="event-input">Nome do encontro<input id="event-input" type="text" maxlength="60" value="TechDay / TechWeek" required></label>
+        <label for="message-input">Mensagem de espera<input id="message-input" type="text" maxlength="120" value="A gente já vai começar." required></label>
+        <label for="detail-input">Mensagem complementar<input id="detail-input" type="text" maxlength="160" value="Enquanto isso, prepare seu café."></label>
+        <label for="end-input">Mensagem ao terminar<input id="end-input" type="text" maxlength="120" value="É hora de conectar ideias." required></label>
+      </div>
+      <fieldset class="theme-settings">
+        <legend>Tema</legend>
+        <div class="presets">
+          <label><input type="radio" name="theme" value="techday" checked><span>TechDay</span></label>
+          <label><input type="radio" name="theme" value="copilot"><span>Copilot Shot Sessions</span></label>
         </div>
-
-        <!-- Etapa 2: Agente -->
-        <div class="bento-card bento-agent">
-            <div class="step-badge">Etapa 2</div>
-            <h2>Gerar postagem com o Agente</h2>
-            <p class="section-desc" style="flex:1;">Use o agente AceleraAI para estruturar o conteúdo no formato da newsletter. Ele irá dar de output dois posts prontos em português e espanhol, você deve se atentar as quebras de linhas, bullet points e formatação como título em negrito, quebra de linha entre título e conteúdo, etc. Em caso de dúvidas, consulte as postagens anteriores.</p>
-            <a href="https://m365.cloud.microsoft/chat/?titleId=T_0a56147a-3ae9-d10d-8b96-3462641c6f08&source=embedded-builder" target="_blank" class="btn btn-primary" style="justify-content: center;">Abrir Agente →</a>
+      </fieldset>
+      <fieldset class="template-settings">
+        <legend>Template da sessão</legend>
+        <div class="template-grid" id="template-grid">
+          <label class="template-option"><input type="radio" name="template" value="" checked><span class="thumb"><span class="thumb-empty">Sem template</span></span><span class="name">Nenhum</span></label>
+          <label class="template-option" id="template-custom-option" hidden><input type="radio" name="template" value="custom"><span class="thumb"><img id="template-custom-preview" alt=""></span><span class="name">Minha imagem</span></label>
         </div>
-
-        <!-- Etapa 3: Imagem -->
-        <div class="bento-card bento-prompt">
-            <div class="step-badge">Etapa 3</div>
-            <h2>Gerar Imagem da postagem</h2>
-            <p class="section-desc">Gere <strong>primeiro a versão em português</strong>, iterando com a IA até atingir o resultado ideal. Após isso, na mesma conversa, peça para gerar exatamente a mesma imagem traduzida para <strong>espanhol (região Plata)</strong>.</p>
-            <div class="card-prompt" style="flex:1;">
-                <div class="prompt-header">
-                    <h4>Prompt Json Padrão de Estilo</h4>
-                    <button class="btn-copy" id="btn-copy-prompt" title="Copiar prompt">
-                        <span class="copy-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></span>
-                        <span class="copy-text">Copiar</span>
-                    </button>
-                </div>
-                <pre class="prompt-content" id="prompt-content" style="max-height: 140px; overflow-y: auto;">{
-  "cores": [
-    {"hex": "#9367FF", "descricao": "Púrpura Vibrante: Cor primária de destaque para marcação e títulos."},
-    {"hex": "#F5EFFF", "descricao": "Lavanda Ultra-claro: Cor de fundo base para suavizar o contraste."},
-    {"hex": "#FFFFFF", "descricao": "Branco: Utilizado em cards de interface e superfícies de componentes."},
-    {"hex": "#FF99FF", "descricao": "Rosa Pastel: Tom de transição nos gradientes e elementos decorativos."},
-    {"hex": "#333333", "descricao": "Cinza Antracite: Cor do texto principal para garantir legibilidade."}
-  ],
-  "tipografia": {
-    "familia": "Sans-serif Geométrica (estilo Inter, Montserrat ou Poppins)",
-    "caracteristicas": "Pesos contrastantes. Uso de 'Extra Bold' em letras maiúsculas para chamadas principais e 'Light/Regular' para descritivos, criando uma hierarquia clara e moderna."
-  },
-  "composicao": {
-    "layout": "Assimétrico e minimalista",
-    "espacamento": "Amplo (High Whitespace), com elementos flutuantes que quebram a rigidez do grid, focando a atenção no centro da tela.",
-    "estrutura": "Foco centralizado no produto com sobreposição de elementos 3D para criar profundidade (z-index)."
-  },
-  "componentes": {
-    "estilo": "Soft UI / Glassmorphism leve",
-    "detalhes": "Cards com bordas muito arredondadas (high border-radius), menus suspensos com sombras de elevação (drop shadows) suaves e botões com cores sólidas e vibrantes."
-  },
-  "texturas": [
-    "Gradientes lineares e radiais suaves (Blobs)",
-    "Elementos 3D com acabamento plástico/mate",
-    "Formas abstratas orgânicas desfocadas ao fundo"
-  ],
-  "mood": "Tecnológico, Futurista, Limpo e Corporativo Premium"
-}</pre>
-                <p class="prompt-example"><em>Exemplo: "Crie uma imagem no estilo abaixo, com o texto 'Novidade: agentes Office disponíveis para todos' com o logo do copilot, powerpoint, excel, word. Siga o estilo JSON: &lt;json colado aqui&gt;"</em></p>
-            </div>
+        <div class="template-actions">
+          <label class="secondary-button file-button" for="template-input"><i data-lucide="upload"></i>Enviar imagem<input class="sr-only" id="template-input" type="file" accept="image/png,image/jpeg,image/webp"></label>
+          <span class="field-hint">PNG, JPG ou WebP, proporção 720 × 712 px.</span>
         </div>
-
-        <!-- Etapa 4: PowerPoint -->
-        <div class="bento-card bento-ppt">
-            <div class="step-badge">Etapa 4</div>
-            <h2>Incluir no PowerPoint</h2>
-            <p class="section-desc" style="flex:1;">Adicione o post e as imagens (PT e ES) na apresentação oficial.</p>
-            <a href="https://nestle-my.sharepoint.com/:p:/r/personal/lucas_nascimento1_br_nestle_com1/Documents/%C3%81rea%20de%20Trabalho/Projects/Letramento%20NBS/Copilot%20vs%20Teams.pptx?d=wd960de0b799d410b83843b56f9f8d787&csf=1&web=1&e=pQtaz4" target="_blank" class="btn btn-primary" style="justify-content: center;">Abrir PPT →</a>
+      </fieldset>
+      <fieldset class="logo-settings">
+        <legend>Logos</legend>
+        <div class="logo-grid">
+          <div class="logo-picker"><span class="logo-picker-title">Logo principal</span><span class="logo-preview"><img id="logo-main-preview" alt=""></span><label class="secondary-button file-button" for="logo-main-input">Escolher<input class="sr-only" id="logo-main-input" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label><button class="secondary-button" id="logo-main-reset" type="button">Padrão</button></div>
+          <div class="logo-picker"><span class="logo-picker-title">Logo do rodapé</span><span class="logo-preview"><img id="logo-footer-preview" alt=""></span><label class="secondary-button file-button" for="logo-footer-input">Escolher<input class="sr-only" id="logo-footer-input" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label><button class="secondary-button" id="logo-footer-reset" type="button">Padrão</button></div>
         </div>
-
-        <!-- Etapa 5: Validação -->
-        <div class="bento-card bento-val">
-            <div class="step-badge">Etapa 5</div>
-            <h2>Validar Preview</h2>
-            <p class="section-desc" style="flex:1;">Poste as versões (PT/ES) para aprovação prévia.</p>
-            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI2MjU1NDY2OTA1NyJ9/all" target="_blank" class="btn btn-primary">Grupo Demo</a>
-        </div>
-
-        <!-- Etapa 6: Publicação -->
-        <div class="bento-card bento-pub bento-wide">
-            <div class="step-badge">Etapa 6</div>
-            <h2>Agendar Publicação</h2>
-            <p class="section-desc">Agende para <strong>sexta às 09h</strong> como anúncio. Se precisar, peça acesso.</p>
-            <div class="cards-grid cards-grid-2">
-                <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI2MjE0OTYzMjAwMSJ9/all" target="_blank" class="card card-link card-publish" style="border: 1px solid #E2E8F0; padding:16px; border-radius:12px; display:flex; flex-direction:column;">
-                    <h4 style="margin:0;">NBS RAO</h4>
-                    <span class="publish-time" style="color:var(--purple); font-weight:600; font-size:0.9rem;">Sexta, 09h</span>
-                </a>
-                <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI2MjE1Nzc5MTIzMyJ9/all" target="_blank" class="card card-link card-publish" style="border: 1px solid #E2E8F0; padding:16px; border-radius:12px; display:flex; flex-direction:column;">
-                    <h4 style="margin:0;">NBS ASU & BA </h4>
-                    <span class="publish-time" style="color:var(--purple); font-weight:600; font-size:0.9rem;">Sexta, 09h</span>
-                </a>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <img src="aitower.png" alt="AI Tower" class="logo-aitower">
-            <p>AceleraAI Newsletter • AI Tower - DOT</p>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+      </fieldset>
+      <div class="preferences">
+        <label class="toggle-row" for="animation-input"><span><i data-lucide="activity"></i>Animação de fundo</span><input class="switch" id="animation-input" type="checkbox" checked></label>
+        <label class="toggle-row" for="sound-input"><span><i data-lucide="volume-2"></i>Sinal sonoro ao terminar</span><input class="switch" id="sound-input" type="checkbox"></label>
+      </div>
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="secondary-button" id="cancel-settings" type="button">Cancelar</button><button class="apply-button" type="submit"><i data-lucide="check"></i>Aplicar</button></div>
+    </form>
+  </dialog>
 </body>
 </html>
