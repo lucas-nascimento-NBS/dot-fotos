@@ -271,6 +271,14 @@
     return node;
   }
 
+  function flagBadge(code) {
+    const badge = el('span', 'session-flag');
+    badge.title = 'English';
+    badge.innerHTML = '<svg viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#012169"/><path d="M0 0L60 30M60 0L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0L60 30M60 0L0 30" stroke="#C8102E" stroke-width="2"/><path d="M30 0V30M0 15H60" stroke="#fff" stroke-width="10"/><path d="M30 0V30M0 15H60" stroke="#C8102E" stroke-width="6"/></svg>';
+    badge.append(code);
+    return badge;
+  }
+
   function buildSessionCard(session) {
     const root = el('section', 'session');
     const brand = el('div', 'session-brand');
@@ -282,7 +290,11 @@
       brand.append(el('span', 'session-divider'), banner);
     }
     root.appendChild(brand);
-    session.titles.forEach((item, index) => root.appendChild(el('p', index ? 'session-title-alt' : 'session-title', item.text)));
+    session.titles.forEach((item, index) => {
+      const title = el('p', index ? 'session-title-alt' : 'session-title', item.text);
+      if (!index && session.spoken) title.appendChild(flagBadge(session.spoken));
+      root.appendChild(title);
+    });
     const texts = el('div', 'session-texts');
     session.descriptions.forEach(item => {
       const block = el('p', 'session-text');

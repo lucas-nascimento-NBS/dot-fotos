@@ -106,4 +106,34 @@ window.techSessions = [
     speakersLanguage: 'PT-BR',
     speakers: [{ name: 'Ramon Fraga Resende', role: 'Head de Operações & Tecnologia no Cubo Itaú', photo: 'speaker7-1.png' }],
   },
+  {
+    id: 'knime1', name: 'KNIME Finanças', banner: 'banner12.png', partner: 'KNIME',
+    titles: [{ lang: 'PT', text: 'KNIME para Finanças: Automação Inteligente de Documentos - OCR, IA Generativa e Governança' }, { lang: 'ES', text: 'KNIME para Finanzas: Automatización Inteligente de Documentos - OCR, IA Generativa y Gobernanza' }],
+    descriptions: [
+      { lang: 'PT', text: 'Descubra como o OCR e a IA Generativa automatizam processos financeiros, otimizam workflows e melhoram a eficiência e a governança documental.' },
+      { lang: 'ES', text: 'Descubre cómo el OCR y la IA Generativa automatizan procesos financieros, optimizan workflows y mejoran la eficiencia y gobernanza documental.' },
+    ],
+    speakersLanguage: 'PT-BR',
+    speakers: [{ name: 'Aline Bessa', role: 'Senior Data Science Consultant', photo: 'speaker12-1.png' }],
+  },
+  {
+    id: 'knime2', name: 'KNIME + Snowflake', banner: 'banner12.png', partner: 'KNIME', spoken: 'EN',
+    titles: [{ text: 'KNIME + Snowflake' }],
+    descriptions: [
+      { lang: 'PT', text: 'Explore como KNIME e Snowflake se conectam para potencializar a integração, a automação e a análise de dados. Descubra novas possibilidades para simplificar processos e transformar dados em valor para o negócio.' },
+      { lang: 'ES', text: 'Explora cómo KNIME y Snowflake se conectan para potenciar la integración, automatización y análisis de datos. Descubre nuevas posibilidades para simplificar procesos y transformar datos en valor para el negocio.' },
+    ],
+    speakersLanguage: 'EN',
+    speakers: [{ name: 'Neal Friesenhahn', role: 'KNIME Solution Engineer', photo: 'speaker12-2.png' }],
+  },
+  {
+    id: 'knime3', name: 'KNIME + Claude', banner: 'banner12.png', partner: 'KNIME', spoken: 'EN',
+    titles: [{ lang: 'PT', text: 'KNIME AI Assistant + Claude: Uma Nova Era de Automação Inteligente' }, { lang: 'ES', text: 'KNIME AI Assistant + Claude: Una Nueva Era de Automatización Inteligente' }],
+    descriptions: [
+      { lang: 'PT', text: 'Integre o KNIME AI Assistant e o Claude para acelerar workflows, simplificar tarefas e potencializar o trabalho com dados.' },
+      { lang: 'ES', text: 'Integra KNIME AI Assistant y Claude para acelerar workflows, simplificar tareas y potenciar el trabajo con datos.' },
+    ],
+    speakersLanguage: 'EN',
+    speakers: [{ name: 'Alexander Fillbrunn', role: 'AI Product Strategy', photo: 'speaker12-3.png' }],
+  },
 ];
