@@ -69,7 +69,10 @@ window.techSessions = [
       { lang: 'ES', text: 'Descubre cómo la Inteligencia Artificial está transformando las plataformas de ventas B2B, optimizando procesos, mejorando la experiencia comercial y potenciando la toma de decisiones.' },
     ],
     speakersLanguage: 'ES',
-    speakers: [{ name: 'Alvaro Vuyk', role: 'Bees & Go to Market Head Paraguay', photo: 'speaker4-1.png' }],
+    speakers: [
+      { name: 'Alvaro Vuyk', role: 'Bees & Go to Market Head Paraguay', photo: 'speaker4-1.png' },
+      { name: 'Valentina Cano', role: 'Audience Management Leader de BEES', photo: 'speaker4-2.png' },
+    ],
   },
   {
     id: 'image5', name: 'Girls Code', banner: 'banner5.png', partner: 'Girls Code',
